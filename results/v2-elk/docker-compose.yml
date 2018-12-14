@@ -1,0 +1,23 @@
+services:
+  elk:
+    image: sebp/elk
+    ports:
+      - "5601:5601"
+      - "9200:9200"
+      - "5044:5044"
+    volumes:
+      - /tmp/elasticsearch:/var/lib/elasticsearch
+  mongo:
+    image: mongo:3.2.1
+    container_name: opnfv-mongo
+  testapi:
+    image: opnfv/testapi:latest
+    container_name: opnfv-testapi
+    environment:
+      - mongodb_url=mongodb://mongo:27017/
+      - base_url=HOST_IP:8001
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+    links:
+      - mongo
