@@ -36,11 +36,7 @@ from flask import jsonify
 from six.moves import configparser
 from oslo_serialization import jsonutils
 from oslo_utils import encodeutils
-
-import yardstick
-from yardstick.common import exceptions
-
-
+import exceptions
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
@@ -70,33 +66,6 @@ def itersubclasses(cls, _seen=None):
             yield sub
             for sub in itersubclasses(sub, _seen):
                 yield sub
-
-
-def import_modules_from_package(package, raise_exception=False):
-    """Import modules given a package name
-
-    :param: package - Full package name. For example: rally.deploy.engines
-    """
-    yardstick_root = os.path.dirname(os.path.dirname(yardstick.__file__))
-    path = os.path.join(yardstick_root, *package.split('.'))
-    for root, _, files in os.walk(path):
-        matches = (filename for filename in files if filename.endswith('.py')
-                   and not filename.startswith('__'))
-        new_package = os.path.relpath(root, yardstick_root).replace(os.sep,
-                                                                    '.')
-        module_names = set(
-            '{}.{}'.format(new_package, filename.rsplit('.py', 1)[0])
-            for filename in matches)
-        # Find modules which haven't already been imported
-        missing_modules = module_names.difference(sys.modules)
-        logger.debug('Importing modules: %s', missing_modules)
-        for module_name in missing_modules:
-            try:
-                importlib.import_module(module_name)
-            except (ImportError, SyntaxError) as exc:
-                if raise_exception:
-                    raise exc
-                logger.exception('Unable to import module %s', module_name)
 
 
 NON_NONE_DEFAULT = object()

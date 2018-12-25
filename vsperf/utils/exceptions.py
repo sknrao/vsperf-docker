@@ -14,9 +14,6 @@
 
 from oslo_utils import excutils
 
-from yardstick.common import constants
-
-
 class ProcessExecutionError(RuntimeError):
     def __init__(self, message, returncode):
         super(ProcessExecutionError, self).__init__(message)
@@ -66,104 +63,104 @@ class VsperfCException(Exception):
         return False
 
 
-class ResourceCommandError(YardstickException):
+class ResourceCommandError(VsperfCException):
     message = 'Command: "%(command)s" Failed, stderr: "%(stderr)s"'
 
 
-class ContextUpdateCollectdForNodeError(YardstickException):
+class ContextUpdateCollectdForNodeError(VsperfCException):
     message = 'Cannot find node %(attr_name)s'
 
 
-class FunctionNotImplemented(YardstickException):
+class FunctionNotImplemented(VsperfCException):
     message = ('The function "%(function_name)s" is not implemented in '
                '"%(class_name)" class.')
 
 
-class InvalidType(YardstickException):
+class InvalidType(VsperfCException):
     message = 'Type "%(type_to_convert)s" is not valid'
 
 
-class InfluxDBConfigurationMissing(YardstickException):
+class InfluxDBConfigurationMissing(VsperfCException):
     message = ('InfluxDB configuration is not available. Add "influxdb" as '
                'a dispatcher and the configuration section')
 
 
-class YardstickBannedModuleImported(YardstickException):
+class YardstickBannedModuleImported(VsperfCException):
     message = 'Module "%(module)s" cannnot be imported. Reason: "%(reason)s"'
 
 
-class IXIAUnsupportedProtocol(YardstickException):
+class IXIAUnsupportedProtocol(VsperfCException):
     message = 'Protocol "%(protocol)" is not supported in IXIA'
 
 
-class PayloadMissingAttributes(YardstickException):
+class PayloadMissingAttributes(VsperfCException):
     message = ('Error instantiating a Payload class, missing attributes: '
                '%(missing_attributes)s')
 
 
-class HeatTemplateError(YardstickException):
+class HeatTemplateError(VsperfCException):
     message = ('Error in Heat during the creation of the OpenStack stack '
                '"%(stack_name)s"')
 
 
-class IPv6RangeError(YardstickException):
+class IPv6RangeError(VsperfCException):
     message = 'Start IP "%(start_ip)s" is greater than end IP "%(end_ip)s"'
 
 
-class TrafficProfileNotImplemented(YardstickException):
+class TrafficProfileNotImplemented(VsperfCException):
     message = 'No implementation for traffic profile %(profile_class)s.'
 
 
-class TrafficProfileRate(YardstickException):
+class TrafficProfileRate(VsperfCException):
     message = 'Traffic profile rate must be "<number>[fps|%]"'
 
 
-class DPDKSetupDriverError(YardstickException):
+class DPDKSetupDriverError(VsperfCException):
     message = '"igb_uio" driver is not loaded'
 
 
-class OVSUnsupportedVersion(YardstickException):
+class OVSUnsupportedVersion(VsperfCException):
     message = ('Unsupported OVS version "%(ovs_version)s". Please check the '
                'config. OVS to DPDK version map: %(ovs_to_dpdk_map)s.')
 
 
-class OVSHugepagesInfoError(YardstickException):
+class OVSHugepagesInfoError(VsperfCException):
     message = 'MemInfo cannnot be retrieved.'
 
 
-class OVSHugepagesNotConfigured(YardstickException):
+class OVSHugepagesNotConfigured(VsperfCException):
     message = 'HugePages are not configured in this system.'
 
 
-class OVSHugepagesZeroFree(YardstickException):
+class OVSHugepagesZeroFree(VsperfCException):
     message = ('There are no HugePages free in this system. Total HugePages '
                'configured: %(total_hugepages)s')
 
 
-class OVSDeployError(YardstickException):
+class OVSDeployError(VsperfCException):
     message = 'OVS deploy tool failed with error: %(stderr)s.'
 
 
-class OVSSetupError(YardstickException):
+class OVSSetupError(VsperfCException):
     message = 'OVS setup error. Command: %(command)s. Error: %(error)s.'
 
 
-class LibvirtCreateError(YardstickException):
+class LibvirtCreateError(VsperfCException):
     message = 'Error creating the virtual machine. Error: %(error)s.'
 
 
-class LibvirtQemuImageBaseImageNotPresent(YardstickException):
+class LibvirtQemuImageBaseImageNotPresent(VsperfCException):
     message = ('Error creating the qemu image for %(vm_image)s. Base image: '
                '%(base_image)s. Base image not present in execution host or '
                'remote host.')
 
 
-class LibvirtQemuImageCreateError(YardstickException):
+class LibvirtQemuImageCreateError(VsperfCException):
     message = ('Error creating the qemu image for %(vm_image)s. Base image: '
                '%(base_image)s. Error: %(error)s.')
 
 
-class SSHError(YardstickException):
+class SSHError(VsperfCException):
     message = '%(error_msg)s'
 
 
@@ -171,11 +168,11 @@ class SSHTimeout(SSHError):
     pass
 
 
-class IncorrectConfig(YardstickException):
+class IncorrectConfig(VsperfCException):
     message = '%(error_msg)s'
 
 
-class IncorrectSetup(YardstickException):
+class IncorrectSetup(VsperfCException):
     message = '%(error_msg)s'
 
 
@@ -183,193 +180,132 @@ class IncorrectNodeSetup(IncorrectSetup):
     pass
 
 
-class ScenarioConfigContextNameNotFound(YardstickException):
+class ScenarioConfigContextNameNotFound(VsperfCException):
     message = 'Context for host name "%(host_name)s" not found'
 
 
-class StackCreationInterrupt(YardstickException):
+class StackCreationInterrupt(VsperfCException):
     message = 'Stack create interrupted.'
 
 
-class TaskRenderArgumentError(YardstickException):
+class TaskRenderArgumentError(VsperfCException):
     message = 'Error reading the task input arguments'
 
 
-class TaskReadError(YardstickException):
+class TaskReadError(VsperfCException):
     message = 'Failed to read task %(task_file)s'
 
 
-class TaskRenderError(YardstickException):
+class TaskRenderError(VsperfCException):
     message = 'Failed to render template:\n%(input_task)s'
 
 
-class RunnerIterationIPCSetupActionNeeded(YardstickException):
+class RunnerIterationIPCSetupActionNeeded(VsperfCException):
     message = ('IterationIPC needs the "setup" action to retrieve the VNF '
                'handling processes PIDs to receive the messages sent')
 
 
-class RunnerIterationIPCNoCtxs(YardstickException):
+class RunnerIterationIPCNoCtxs(VsperfCException):
     message = 'Benchmark "setup" action did not return any VNF process PID'
 
 
-class TimerTimeout(YardstickException):
+class TimerTimeout(VsperfCException):
     message = 'Timer timeout expired, %(timeout)s seconds'
 
 
-class WaitTimeout(YardstickException):
+class WaitTimeout(VsperfCException):
     message = 'Wait timeout while waiting for condition'
 
 
-class PktgenActionError(YardstickException):
+class PktgenActionError(VsperfCException):
     message = 'Error in "%(action)s" action'
 
 
-class KubernetesApiException(YardstickException):
-    message = ('Kubernetes API errors. Action: %(action)s, '
-               'resource: %(resource)s')
-
-
-class KubernetesConfigFileNotFound(YardstickException):
-    message = 'Config file (%s) not found' % constants.K8S_CONF_FILE
-
-
-class KubernetesTemplateInvalidVolumeType(YardstickException):
-    message = 'No valid "volume" types present in %(volume)s'
-
-
-class KubernetesSSHPortNotDefined(YardstickException):
-    message = 'Port 22 needs to be defined'
-
-
-class KubernetesServiceObjectNotDefined(YardstickException):
-    message = 'ServiceObject is not defined'
-
-
-class KubernetesServiceObjectDefinitionError(YardstickException):
-    message = ('Kubernetes Service object definition error, missing '
-               'parameters: %(missing_parameters)s')
-
-
-class KubernetesServiceObjectNameError(YardstickException):
-    message = ('Kubernetes Service object name "%(name)s" does not comply'
-               'naming convention')
-
-
-class KubernetesCRDObjectDefinitionError(YardstickException):
-    message = ('Kubernetes Custom Resource Definition Object error, missing '
-               'parameters: %(missing_parameters)s')
-
-
-class KubernetesNetworkObjectDefinitionError(YardstickException):
-    message = ('Kubernetes Network object definition error, missing '
-               'parameters: %(missing_parameters)s')
-
-
-class KubernetesNetworkObjectKindMissing(YardstickException):
-    message = 'Kubernetes kind "Network" is not defined'
-
-
-class KubernetesWrongRestartPolicy(YardstickException):
-    message = 'Restart policy "%(rpolicy)s" is not valid'
-
-
-class KubernetesContainerPortNotDefined(YardstickException):
-    message = 'Container port not defined in "%(port)s"'
-
-
-class KubernetesContainerWrongImagePullPolicy(YardstickException):
-    message = 'Image pull policy must be "Always", "IfNotPresent" or "Never"'
-
-
-class KubernetesContainerCommandType(YardstickException):
-    message = '"args" and "command" must be string or list of strings'
-
-
-class ScenarioCreateNetworkError(YardstickException):
+class ScenarioCreateNetworkError(VsperfCException):
     message = 'Create Neutron Network Scenario failed'
 
 
-class ScenarioCreateSubnetError(YardstickException):
+class ScenarioCreateSubnetError(VsperfCException):
     message = 'Create Neutron Subnet Scenario failed'
 
 
-class ScenarioDeleteRouterError(YardstickException):
+class ScenarioDeleteRouterError(VsperfCException):
     message = 'Delete Neutron Router Scenario failed'
 
 
-class MissingPodInfoError(YardstickException):
+class MissingPodInfoError(VsperfCException):
     message = 'Missing pod args, please check'
 
 
-class UnsupportedPodFormatError(YardstickException):
+class UnsupportedPodFormatError(VsperfCException):
     message = 'Failed to load pod info, unsupported format'
 
 
-class ScenarioCreateRouterError(YardstickException):
+class ScenarioCreateRouterError(VsperfCException):
     message = 'Create Neutron Router Scenario failed'
 
 
-class ScenarioRemoveRouterIntError(YardstickException):
+class ScenarioRemoveRouterIntError(VsperfCException):
     message = 'Remove Neutron Router Interface Scenario failed'
 
 
-class ScenarioCreateFloatingIPError(YardstickException):
+class ScenarioCreateFloatingIPError(VsperfCException):
     message = 'Create Neutron Floating IP Scenario failed'
 
 
-class ScenarioDeleteFloatingIPError(YardstickException):
+class ScenarioDeleteFloatingIPError(VsperfCException):
     message = 'Delete Neutron Floating IP Scenario failed'
 
 
-class ScenarioCreateSecurityGroupError(YardstickException):
+class ScenarioCreateSecurityGroupError(VsperfCException):
     message = 'Create Neutron Security Group Scenario failed'
 
 
-class ScenarioDeleteNetworkError(YardstickException):
+class ScenarioDeleteNetworkError(VsperfCException):
     message = 'Delete Neutron Network Scenario failed'
 
 
-class ScenarioCreateServerError(YardstickException):
+class ScenarioCreateServerError(VsperfCException):
     message = 'Nova Create Server Scenario failed'
 
 
-class ScenarioDeleteServerError(YardstickException):
+class ScenarioDeleteServerError(VsperfCException):
     message = 'Delete Server Scenario failed'
 
 
-class ScenarioCreateKeypairError(YardstickException):
+class ScenarioCreateKeypairError(VsperfCException):
     message = 'Nova Create Keypair Scenario failed'
 
 
-class ScenarioDeleteKeypairError(YardstickException):
+class ScenarioDeleteKeypairError(VsperfCException):
     message = 'Nova Delete Keypair Scenario failed'
 
 
-class ScenarioAttachVolumeError(YardstickException):
+class ScenarioAttachVolumeError(VsperfCException):
     message = 'Nova Attach Volume Scenario failed'
 
 
-class ScenarioGetServerError(YardstickException):
+class ScenarioGetServerError(VsperfCException):
     message = 'Nova Get Server Scenario failed'
 
 
-class ScenarioGetFlavorError(YardstickException):
+class ScenarioGetFlavorError(VsperfCException):
     message = 'Nova Get Falvor Scenario failed'
 
 
-class ScenarioCreateVolumeError(YardstickException):
+class ScenarioCreateVolumeError(VsperfCException):
     message = 'Cinder Create Volume Scenario failed'
 
 
-class ScenarioDeleteVolumeError(YardstickException):
+class ScenarioDeleteVolumeError(VsperfCException):
     message = 'Cinder Delete Volume Scenario failed'
 
 
-class ScenarioDetachVolumeError(YardstickException):
+class ScenarioDetachVolumeError(VsperfCException):
     message = 'Cinder Detach Volume Scenario failed'
 
 
-class ApiServerError(YardstickException):
+class ApiServerError(VsperfCException):
     message = 'An unkown exception happened to Api Server!'
 
 
@@ -381,44 +317,25 @@ class UpdateOpenrcError(ApiServerError):
     message = 'Update openrc ERROR!'
 
 
-class ScenarioCreateImageError(YardstickException):
+class ScenarioCreateImageError(VsperfCException):
     message = 'Glance Create Image Scenario failed'
 
 
-class ScenarioDeleteImageError(YardstickException):
+class ScenarioDeleteImageError(VsperfCException):
     message = 'Glance Delete Image Scenario failed'
 
 
-class IxNetworkClientNotConnected(YardstickException):
-    message = 'IxNetwork client not connected to a TCL server'
 
-
-class IxNetworkFlowNotPresent(YardstickException):
-    message = 'Flow Group "%(flow_group)s" is not present'
-
-
-class IxNetworkFieldNotPresentInStackItem(YardstickException):
-    message = 'Field "%(field_name)s" not present in stack item %(stack_item)s'
-
-
-class SLAValidationError(YardstickException):
+class SLAValidationError(VsperfCException):
     message = '%(case_name)s SLA validation failed. Error: %(error_msg)s'
 
 
-class AclMissingActionArguments(YardstickException):
-    message = ('Missing ACL action parameter '
-               '[action=%(action_name)s parameter=%(action_param)s]')
 
-
-class AclUnknownActionTemplate(YardstickException):
-    message = 'No ACL CLI template found for "%(action_name)s" action'
-
-
-class InvalidMacAddress(YardstickException):
+class InvalidMacAddress(VsperfCException):
     message = 'Mac address "%(mac_address)s" is invalid'
 
 
-class ValueCheckError(YardstickException):
+class ValueCheckError(VsperfCException):
     message = 'Constraint "%(value1)s %(operator)s %(value2)s" does not hold'
 
 
@@ -426,9 +343,3 @@ class RestApiError(RuntimeError):
     def __init__(self, message):
         self._message = message
         super(RestApiError, self).__init__(message)
-
-
-class LandslideTclException(RuntimeError):
-    def __init__(self, message):
-        self._message = message
-        super(LandslideTclException, self).__init__(message)
