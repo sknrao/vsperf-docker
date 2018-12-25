@@ -8,7 +8,7 @@ CHUNK_SIZE = 1024 * 1024  # 1MB
 def get_file_chunks(filename):
     with open(filename, 'rb') as f:
         while True:
-            piece = f.read(CHUNK_SIZE);
+            piece = f.read(CHUNK_SIZE)
             if len(piece) == 0:
                 return
             yield vsperf_pb2.ConfFile(Content=piece)
@@ -20,6 +20,7 @@ def upload_config(stub):
     upload_status = stub.UploadConfigFile(chunks)
     print(upload_status.Message)
 
+
 def start_test(stub):
     print("Later")
     test_control = vsperf_pb2.ControlVsperf(testtype='PVP',
@@ -27,11 +28,14 @@ def start_test(stub):
     control_reply = stub.StartTest(test_control)
     print(control_reply.message)
 
+
 def vsperf_install(stub):
     print("Build Message")
-    hostinfo = vsperf_pb2.HostInfo(ip='127.0.0.1', uname='root', pwd='pwd')
+    hostinfo = vsperf_pb2.HostInfo(ip='10.10.120.21', uname='root',
+                                   pwd='PPPPP')
     install_reply = stub.VsperfInstall(hostinfo)
     print(install_reply.message)
+
 
 def run():
     with grpc.insecure_channel('localhost:50051') as channel:

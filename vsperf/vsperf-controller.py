@@ -1,15 +1,15 @@
 import vsperf_pb2_grpc as vsperf_pb2_grpc
 from concurrent import futures
+from utils import ssh as ssh
 import time
-#import math
 import grpc
 import vsperf_pb2
-import os
-import sys
-sys.path.insert(0, os.getcwd())
-from utils import ssh as ssh
+# import os
+# import sys
+# sys.path.insert(0, os.getcwd())
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
+
 
 class VsperfController(vsperf_pb2_grpc.ControllerServicer):
     def __init__(self):
@@ -20,12 +20,12 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         self.pwd = None
         self.vsperf_conf = None
         self.scenario = None
+        self.conffile = "vsperf.conf"
 
     def setup(self):
         # copy vsperf conf to VM
-        self.client = ssh.SSH.from_node(self.dut, defaults={
-            "user": self.user, "password": self.pwd
-        })
+        self.client = ssh.SSH(host=self.dut, user=self.user,
+                              password=self.pwd)
         self.client.wait()
 
     def install_vsperf(self):
@@ -37,7 +37,7 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         self.client.run(install_cmd)
 
     def upload_config(self):
-        self.client._put_file_shell(self.vsperf_conf, '~/vsperf.conf')
+        self.client._put_file_shell(self.conffile, '~/vsperf.conf')
 
     def run_test(self):
         # execute vsperf
@@ -50,12 +50,12 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
 
     def VsperfInstall(self, request, context):
         print("Installing VSPERF")
-        return vsperf_pb2.StatusReply(message="Successfully Installed")
         self.dut = request.ip
         self.user = request.uname
         self.pwd = request.pwd
         self.setup()
-        self.vsperf_install()
+        self.install_vsperf()
+        return vsperf_pb2.StatusReply(message="Successfully Installed")
 
     def save_chunks_to_file(self, chunks, filename):
         with open(filename, 'wb') as f:
@@ -64,8 +64,9 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
 
     def UploadConfigFile(self, request, context):
         print("Uploading Configuration file")
-        filename = 'vsperf.conf'
+        filename = self.conffile
         self.save_chunks_to_file(request, filename)
+        self.upload_config()
         return vsperf_pb2.UploadStatus(Message="Success",
                                        Code=1)
 
