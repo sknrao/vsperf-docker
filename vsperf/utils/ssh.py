@@ -13,7 +13,7 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-# yardstick comment: this is a modified copy of rally/rally/common/sshutils.py
+# this is a modified copy of rally/rally/common/sshutils.py
 
 """High level ssh library.
 
@@ -59,7 +59,7 @@ Eventlet:
     or
     eventlet.monkey_patch()
     or
-    sshclient = eventlet.import_patched("yardstick.ssh")
+    sshclient = eventlet.import_patched("vsperf.ssh")
 
 """
 import io
@@ -115,7 +115,8 @@ class SSH(object):
 
     @staticmethod
     def get_class():
-        # must return static class name, anything else refers to the calling class
+        # must return static class name, anything else
+        # refers to the calling class
         # i.e. the subclass, not the superclass
         return SSH
 
@@ -438,7 +439,6 @@ class SSH(object):
         except (paramiko.SSHException, socket.error):
             self._put_file_shell(localpath, remotepath, mode=mode)
 
-
     def put_file_obj(self, file_obj, remotepath, mode=None):
         client = self._get_client()
 
@@ -465,7 +465,8 @@ class AutoConnectSSH(SSH):
     # always wait or we will get OpenStack SSH errors
     def __init__(self, user, host, port=None, pkey=None,
                  key_filename=None, password=None, name=None, wait=True):
-        super(AutoConnectSSH, self).__init__(user, host, port, pkey, key_filename, password, name)
+        super(AutoConnectSSH, self).__init__(user, host, port, pkey,
+                                             key_filename, password, name)
         if wait and wait is not True:
             self.wait_timeout = int(wait)
 
@@ -505,7 +506,8 @@ class AutoConnectSSH(SSH):
             raise_on_error=True, timeout=3600,
             keep_stdin_open=False, pty=False):
         self._connect()
-        return super(AutoConnectSSH, self).run(cmd, stdin, stdout, stderr, raise_on_error,
+        return super(AutoConnectSSH, self).run(cmd, stdin, stdout,
+                                               stderr, raise_on_error,
                                                timeout, keep_stdin_open, pty)
 
     def put(self, files, remote_path=b'.', recursive=False):
@@ -514,19 +516,21 @@ class AutoConnectSSH(SSH):
 
     def put_file(self, local_path, remote_path, mode=None):
         self._connect()
-        return super(AutoConnectSSH, self).put_file(local_path, remote_path, mode)
+        return super(AutoConnectSSH, self).put_file(local_path,
+                                                    remote_path, mode)
 
     def put_file_obj(self, file_obj, remote_path, mode=None):
         self._connect()
-        return super(AutoConnectSSH, self).put_file_obj(file_obj, remote_path, mode)
+        return super(AutoConnectSSH, self).put_file_obj(file_obj,
+                                                        remote_path, mode)
 
     def get_file_obj(self, remote_path, file_obj):
         self._connect()
         return super(AutoConnectSSH, self).get_file_obj(remote_path, file_obj)
 
-
     @staticmethod
     def get_class():
-        # must return static class name, anything else refers to the calling class
+        # must return static class name,
+        # anything else refers to the calling class
         # i.e. the subclass, not the superclass
         return AutoConnectSSH

@@ -32,7 +32,7 @@ def start_test(stub):
 def vsperf_install(stub):
     print("Build Message")
     hostinfo = vsperf_pb2.HostInfo(ip='10.10.120.21', uname='root',
-                                   pwd='PPPPP')
+                                   pwd='P')
     install_reply = stub.VsperfInstall(hostinfo)
     print(install_reply.message)
 

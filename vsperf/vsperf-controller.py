@@ -41,7 +41,8 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
 
     def run_test(self):
         # execute vsperf
-        cmd = "source ~/vsperfenv/bin/activate ; cd vswitchperf ; "
+        cmd = "scl enable python33 bash ; "
+        cmd += "source ~/vsperfenv/bin/activate ; cd vswitchperf ; "
         cmd += "./vsperf "
         if self.vsperf_conf:
             cmd += "--conf-file ~/vsperf.conf "
@@ -54,8 +55,8 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         self.user = request.uname
         self.pwd = request.pwd
         self.setup()
-        self.install_vsperf()
         return vsperf_pb2.StatusReply(message="Successfully Installed")
+        self.install_vsperf()
 
     def save_chunks_to_file(self, chunks, filename):
         with open(filename, 'wb') as f:
@@ -75,6 +76,7 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
     def StartTest(self, request, context):
         print("Starting test " + request.testtype + " and using config file " +
               request.conffile)
+        self.run_test()
         return vsperf_pb2.StatusReply(message="Test Successfully running...")
 
 
