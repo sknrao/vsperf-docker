@@ -1,21 +1,39 @@
+volumes:
+    elk-data:
+    mongo-data:
 services:
   elk:
-    image: sebp/elk
+    image: vsperf/elk
     ports:
       - "5601:5601"
       - "9200:9200"
       - "5044:5044"
+      - "25826:25826/udp"
+      - "25826:25826"
+    expose:
+      - "25826"
     volumes:
-      - /tmp/elasticsearch:/var/lib/elasticsearch
+      - elk-data:/var/lib/elasticsearch
+      - logstash/pipeline/30-output.conf:/etc/logstash/conf.d/30-output.conf
+      - logstash/pipeline/02-beats-input.conf:/etc/logstash/conf.d/02-beats-input.conf
+      - logstash/pipeline/20-collectd-input.conf:/etc/logstash/conf.d/20-collectd-input.conf
+    environment:
+      - discovery.type=single-node
   mongo:
     image: mongo:3.2.1
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
     container_name: opnfv-mongo
   testapi:
     image: opnfv/testapi:latest
     container_name: opnfv-testapi
+    volumes:
+      - testapi/logs:/home/testapi/logs
     environment:
-      - mongodb_url=mongodb://mongo:27017/
-      - base_url=HOST_IP:8001
+      - mongodb_url=mongodb://0.0.0.0:27017/
+      - base_url=0.0.0.0:8001
     ports:
       - "8000:8000"
       - "8001:8001"
