@@ -1,9 +1,9 @@
-import vsperf_pb2_grpc as vsperf_pb2_grpc
+import proto.vsperf_pb2_grpc as vsperf_pb2_grpc
 from concurrent import futures
 from utils import ssh as ssh
 import time
 import grpc
-import vsperf_pb2
+import proto.vsperf_pb2 as vsperf_pb2
 # import os
 # import sys
 # sys.path.insert(0, os.getcwd())
