@@ -1,3 +1,4 @@
+version: '3'
 volumes:
     elk-data:
     mongo-data:
@@ -14,9 +15,9 @@ services:
       - "25826"
     volumes:
       - elk-data:/var/lib/elasticsearch
-      - logstash/pipeline/30-output.conf:/etc/logstash/conf.d/30-output.conf
-      - logstash/pipeline/02-beats-input.conf:/etc/logstash/conf.d/02-beats-input.conf
-      - logstash/pipeline/20-collectd-input.conf:/etc/logstash/conf.d/20-collectd-input.conf
+      - ./logstash/pipeline/30-output.conf:/etc/logstash/conf.d/30-output.conf
+      - ./logstash/pipeline/02-beats-input.conf:/etc/logstash/conf.d/02-beats-input.conf
+      - ./logstash/pipeline/20-collectd-input.conf:/etc/logstash/conf.d/20-collectd-input.conf
     environment:
       - discovery.type=single-node
   mongo:
@@ -30,7 +31,7 @@ services:
     image: opnfv/testapi:latest
     container_name: opnfv-testapi
     volumes:
-      - testapi/logs:/home/testapi/logs
+      - ./testapi/logs:/home/testapi/logs
     environment:
       - mongodb_url=mongodb://0.0.0.0:27017/
       - base_url=0.0.0.0:8001
