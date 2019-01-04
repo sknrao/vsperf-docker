@@ -75,9 +75,12 @@ from chainmap import ChainMap
 from oslo_utils import encodeutils
 from scp import SCPClient
 import six
-
-import utils.exceptions as exceptions
-from utils.utils import try_int, NON_NONE_DEFAULT, make_dict_from_map
+# When building container change this to
+# import utils.exeptions as exceptions
+import exceptions
+# When building container change this to
+# from utils.utils import ....
+from utils import try_int, NON_NONE_DEFAULT, make_dict_from_map
 
 
 def convert_key_to_str(key):
