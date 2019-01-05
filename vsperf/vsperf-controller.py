@@ -51,12 +51,16 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
 
     def VsperfInstall(self, request, context):
         print("Installing VSPERF")
+        self.install_vsperf()
+        return vsperf_pb2.StatusReply(message="Successfully Installed")
+
+    def HostConnect(self, request, context):
         self.dut = request.ip
         self.user = request.uname
         self.pwd = request.pwd
         self.setup()
-        return vsperf_pb2.StatusReply(message="Successfully Installed")
-        self.install_vsperf()
+        return vsperf_pb2.StatusReply(message="Successfully Connected")
+
 
     def save_chunks_to_file(self, chunks, filename):
         with open(filename, 'wb') as f:
@@ -68,7 +72,7 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         filename = self.conffile
         self.save_chunks_to_file(request, filename)
         self.upload_config()
-        return vsperf_pb2.UploadStatus(Message="Success",
+        return vsperf_pb2.UploadStatus(Message="Successfully Uploaded",
                                        Code=1)
 
         # Same file file and assign the path to self.vsperf_conf

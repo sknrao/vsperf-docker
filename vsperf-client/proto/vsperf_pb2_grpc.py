@@ -14,6 +14,11 @@ class ControllerStub(object):
     Args:
       channel: A grpc.Channel.
     """
+    self.HostConnect = channel.unary_unary(
+        '/vsperf.Controller/HostConnect',
+        request_serializer=vsperf__pb2.HostInfo.SerializeToString,
+        response_deserializer=vsperf__pb2.StatusReply.FromString,
+        )
     self.VsperfInstall = channel.unary_unary(
         '/vsperf.Controller/VsperfInstall',
         request_serializer=vsperf__pb2.HostInfo.SerializeToString,
@@ -39,6 +44,13 @@ class ControllerStub(object):
 class ControllerServicer(object):
   # missing associated documentation comment in .proto file
   pass
+
+  def HostConnect(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
 
   def VsperfInstall(self, request, context):
     # missing associated documentation comment in .proto file
@@ -71,6 +83,11 @@ class ControllerServicer(object):
 
 def add_ControllerServicer_to_server(servicer, server):
   rpc_method_handlers = {
+      'HostConnect': grpc.unary_unary_rpc_method_handler(
+          servicer.HostConnect,
+          request_deserializer=vsperf__pb2.HostInfo.FromString,
+          response_serializer=vsperf__pb2.StatusReply.SerializeToString,
+      ),
       'VsperfInstall': grpc.unary_unary_rpc_method_handler(
           servicer.VsperfInstall,
           request_deserializer=vsperf__pb2.HostInfo.FromString,

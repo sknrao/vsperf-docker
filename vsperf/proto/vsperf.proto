@@ -17,6 +17,7 @@ syntax = "proto3";
 package vsperf;
 
 service Controller {
+  rpc HostConnect (HostInfo) returns (StatusReply) {}
   rpc VsperfInstall (HostInfo) returns (StatusReply) {}
   rpc UploadConfigFile (stream ConfFile) returns (UploadStatus) {}
   rpc StartTest (ControlVsperf) returns (StatusReply) {}

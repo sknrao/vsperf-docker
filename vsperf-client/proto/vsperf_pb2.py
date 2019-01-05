@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='vsperf',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x0cvsperf.proto\x12\x06vsperf\"3\n\rControlVsperf\x12\x10\n\x08testtype\x18\x01 \x01(\t\x12\x10\n\x08\x63onffile\x18\x02 \x01(\t\"\x1b\n\x08\x43onfFile\x12\x0f\n\x07\x43ontent\x18\x01 \x01(\x0c\"2\n\x08HostInfo\x12\n\n\x02ip\x18\x01 \x01(\t\x12\r\n\x05uname\x18\x02 \x01(\t\x12\x0b\n\x03pwd\x18\x03 \x01(\t\"\x1f\n\x0bStatusQuery\x12\x10\n\x08testtype\x18\x01 \x01(\t\"\x1e\n\x0bStatusReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"G\n\x0cUploadStatus\x12\x0f\n\x07Message\x18\x01 \x01(\t\x12&\n\x04\x43ode\x18\x02 \x01(\x0e\x32\x18.vsperf.UploadStatusCode*3\n\x10UploadStatusCode\x12\x0b\n\x07Unknown\x10\x00\x12\x06\n\x02Ok\x10\x01\x12\n\n\x06\x46\x61iled\x10\x02\x32\xfb\x01\n\nController\x12\x38\n\rVsperfInstall\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12>\n\x10UploadConfigFile\x12\x10.vsperf.ConfFile\x1a\x14.vsperf.UploadStatus\"\x00(\x01\x12\x39\n\tStartTest\x12\x15.vsperf.ControlVsperf\x1a\x13.vsperf.StatusReply\"\x00\x12\x38\n\nTestStatus\x12\x13.vsperf.StatusQuery\x1a\x13.vsperf.StatusReply\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x0cvsperf.proto\x12\x06vsperf\"3\n\rControlVsperf\x12\x10\n\x08testtype\x18\x01 \x01(\t\x12\x10\n\x08\x63onffile\x18\x02 \x01(\t\"\x1b\n\x08\x43onfFile\x12\x0f\n\x07\x43ontent\x18\x01 \x01(\x0c\"2\n\x08HostInfo\x12\n\n\x02ip\x18\x01 \x01(\t\x12\r\n\x05uname\x18\x02 \x01(\t\x12\x0b\n\x03pwd\x18\x03 \x01(\t\"\x1f\n\x0bStatusQuery\x12\x10\n\x08testtype\x18\x01 \x01(\t\"\x1e\n\x0bStatusReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"G\n\x0cUploadStatus\x12\x0f\n\x07Message\x18\x01 \x01(\t\x12&\n\x04\x43ode\x18\x02 \x01(\x0e\x32\x18.vsperf.UploadStatusCode*3\n\x10UploadStatusCode\x12\x0b\n\x07Unknown\x10\x00\x12\x06\n\x02Ok\x10\x01\x12\n\n\x06\x46\x61iled\x10\x02\x32\xb3\x02\n\nController\x12\x36\n\x0bHostConnect\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x38\n\rVsperfInstall\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12>\n\x10UploadConfigFile\x12\x10.vsperf.ConfFile\x1a\x14.vsperf.UploadStatus\"\x00(\x01\x12\x39\n\tStartTest\x12\x15.vsperf.ControlVsperf\x1a\x13.vsperf.StatusReply\"\x00\x12\x38\n\nTestStatus\x12\x13.vsperf.StatusQuery\x1a\x13.vsperf.StatusReply\"\x00\x62\x06proto3')
 )
 
 _UPLOADSTATUSCODE = _descriptor.EnumDescriptor(
@@ -330,12 +330,21 @@ _CONTROLLER = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   serialized_start=350,
-  serialized_end=601,
+  serialized_end=657,
   methods=[
+  _descriptor.MethodDescriptor(
+    name='HostConnect',
+    full_name='vsperf.Controller.HostConnect',
+    index=0,
+    containing_service=None,
+    input_type=_HOSTINFO,
+    output_type=_STATUSREPLY,
+    serialized_options=None,
+  ),
   _descriptor.MethodDescriptor(
     name='VsperfInstall',
     full_name='vsperf.Controller.VsperfInstall',
-    index=0,
+    index=1,
     containing_service=None,
     input_type=_HOSTINFO,
     output_type=_STATUSREPLY,
@@ -344,7 +353,7 @@ _CONTROLLER = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='UploadConfigFile',
     full_name='vsperf.Controller.UploadConfigFile',
-    index=1,
+    index=2,
     containing_service=None,
     input_type=_CONFFILE,
     output_type=_UPLOADSTATUS,
@@ -353,7 +362,7 @@ _CONTROLLER = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='StartTest',
     full_name='vsperf.Controller.StartTest',
-    index=2,
+    index=3,
     containing_service=None,
     input_type=_CONTROLVSPERF,
     output_type=_STATUSREPLY,
@@ -362,7 +371,7 @@ _CONTROLLER = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='TestStatus',
     full_name='vsperf.Controller.TestStatus',
-    index=3,
+    index=4,
     containing_service=None,
     input_type=_STATUSQUERY,
     output_type=_STATUSREPLY,
