@@ -76,11 +76,13 @@ from oslo_utils import encodeutils
 from scp import SCPClient
 import six
 # When building container change this to
-# import utils.exeptions as exceptions
-import exceptions
+import utils.exceptions as exceptions
+#else keep it as
+#import exceptions
 # When building container change this to
-# from utils.utils import ....
-from utils import try_int, NON_NONE_DEFAULT, make_dict_from_map
+from utils.utils import try_int, NON_NONE_DEFAULT, make_dict_from_map
+#else keep it as
+#from utils import try_int, NON_NONE_DEFAULT, make_dict_from_map
 
 
 def convert_key_to_str(key):

@@ -64,7 +64,6 @@ class VsperfClient(object):
         print(control_reply.message)
 
     def vsperf_install(self):
-        print("Build Message")
         hostinfo = vsperf_pb2.HostInfo(ip=self.config.get('Host', 'ip'),
                                        uname=self.config.get('Host', 'uname'),
                                        pwd=self.config.get('Host', 'pwd'))
@@ -72,7 +71,6 @@ class VsperfClient(object):
         print(install_reply.message)
 
     def host_connect(self):
-        print("Build Message")
         hostinfo = vsperf_pb2.HostInfo(ip=self.config.get('Host', 'ip'),
                                        uname=self.config.get('Host', 'uname'),
                                        pwd=self.config.get('Host', 'pwd'))
