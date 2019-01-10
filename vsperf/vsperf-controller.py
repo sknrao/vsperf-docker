@@ -3,6 +3,7 @@ from concurrent import futures
 from utils import ssh as ssh
 import time
 import grpc
+import io
 import proto.vsperf_pb2 as vsperf_pb2
 # import os
 # import sys
@@ -11,9 +12,17 @@ import proto.vsperf_pb2 as vsperf_pb2
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
 
+class PseudoFile(io.RawIOBase):
+    def write(self, chunk):
+        if "error" in chunk:
+            return
+        with open("./output.txt", "a") as f:
+            f.write(chunk)
+
+
 class VsperfController(vsperf_pb2_grpc.ControllerServicer):
     def __init__(self):
-        print("Init Function")
+        # print("Init Function")
         self.client = None
         self.dut = None
         self.user = None
@@ -41,16 +50,19 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
 
     def run_test(self):
         # execute vsperf
-        cmd = "scl enable python33 bash ; "
-        cmd += "source ~/vsperfenv/bin/activate ; cd vswitchperf ; "
+        # cmd = "scl enable python33 bash ; "
+        cmd = "source ~/vsperfenv/bin/activate ; cd vswitchperf ; "
         cmd += "./vsperf "
         if self.vsperf_conf:
             cmd += "--conf-file ~/vsperf.conf "
+            # cmd += self.conffile
         cmd += self.scenario
-        self.client.run(cmd)
+        with PseudoFile() as p:
+            self.client.run(cmd, stdout=p, timeout=0)
+        # self.client.run(cmd)
 
     def VsperfInstall(self, request, context):
-        print("Installing VSPERF")
+        # print("Installing VSPERF")
         self.install_vsperf()
         return vsperf_pb2.StatusReply(message="Successfully Installed")
 
@@ -61,14 +73,13 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         self.setup()
         return vsperf_pb2.StatusReply(message="Successfully Connected")
 
-
     def save_chunks_to_file(self, chunks, filename):
         with open(filename, 'wb') as f:
             for chunk in chunks:
                 f.write(chunk.Content)
 
     def UploadConfigFile(self, request, context):
-        print("Uploading Configuration file")
+        # print("Uploading Configuration file")
         filename = self.conffile
         self.save_chunks_to_file(request, filename)
         self.upload_config()
@@ -78,8 +89,11 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         # Same file file and assign the path to self.vsperf_conf
 
     def StartTest(self, request, context):
-        print("Starting test " + request.testtype + " and using config file " +
-              request.conffile)
+        # print("Starting test " + request.testtype +
+        #      " and using config file " +
+        #      request.conffile)
+        self.vsperf_conf = request.conffile
+        self.scenario = request.testtype
         self.run_test()
         return vsperf_pb2.StatusReply(message="Test Successfully running...")
 

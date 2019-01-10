@@ -13,6 +13,8 @@ WORKDIR /usr/src/app
 
 COPY ./vsperf ./vsperf
 
+VOLUME ["/usr/src/app/vsperf"]
+
 EXPOSE 50051
 
 CMD ["python", "./vsperf/vsperf-controller.py"]
