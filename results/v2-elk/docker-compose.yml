@@ -2,6 +2,7 @@ version: '3'
 volumes:
     elk-data:
     mongo-data:
+    testapi-logs:
 services:
   elk:
     image: vsperf/elk
@@ -31,7 +32,7 @@ services:
     image: opnfv/testapi:latest
     container_name: opnfv-testapi
     volumes:
-      - ./testapi/logs:/home/testapi/logs
+      - testapi-logs:/home/testapi/logs
     environment:
       - mongodb_url=mongodb://opnfv-mongo:27017/
       - base_url=http://0.0.0.0:8000
