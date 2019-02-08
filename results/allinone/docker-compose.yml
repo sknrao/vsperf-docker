@@ -1,19 +1,37 @@
 version: '3'
 volumes:
     elk-data:
+    influx-data:
+    grafana-data:
     mongo-data:
     testapi-logs:
 services:
+  influxdb:
+    image: opnfv/barometer-influxdb
+    ports:
+      - "25826:25826/udp"
+      - "25826:25826"
+      - "8083:8083"
+      - "8086:8086"
+    expose:
+      - "25826"
+      - "8086"
+      - "8083"
+    volumes:
+      - influx-data:/var/lib/influxdb
+  grafana:
+    image: opnfv/barometer-grafana
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/dashboards:/opt/grafana/dashboards
+    ports:
+      - "3000:3000"
   elk:
     image: vsperf/elk
     ports:
       - "5601:5601"
       - "9200:9200"
       - "5044:5044"
-      - "25826:25826/udp"
-      - "25826:25826"
-    expose:
-      - "25826"
     volumes:
       - elk-data:/var/lib/elasticsearch
       - ./logstash/pipeline/30-output.conf:/etc/logstash/conf.d/30-output.conf
@@ -35,7 +53,7 @@ services:
       - testapi-logs:/home/testapi/logs
     environment:
       - mongodb_url=mongodb://opnfv-mongo:27017/
-      - base_url=http://0.0.0.0:8000
+      - base_url=http://10.10.120.22:8000
     ports:
       - "8000:8000"
       - "8001:8001"
