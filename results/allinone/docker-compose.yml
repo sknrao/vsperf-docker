@@ -59,3 +59,20 @@ services:
       - "8001:8001"
     links:
       - mongo
+  jupyter:
+    build:
+      context: ./jupyter
+    ports:
+      - "8888:8888"
+    links:
+      - postgres
+    volumes:
+      - ./notebooks:/notebooks
+      - ./notebooks/testresult-analysis.ipynb:/notebooks/testresult-analysis.ipynb
+      - ./data:/data
+  postgres:
+    image: postgres
+    restart: always
+      POSTGRES_USER: data
+      POSTGRES_PASSWORD: data
+      POSTGRES_DB: data
