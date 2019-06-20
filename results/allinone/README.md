@@ -1,4 +1,4 @@
-### Please set the limit on mmap counts equal to 262144 or more.
+## Please set the limit on mmap counts equal to 262144 or more.
 
 There are two options. Run this command:
 ```sh

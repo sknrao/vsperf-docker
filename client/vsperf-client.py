@@ -53,8 +53,24 @@ class VsperfClient(object):
         upload_status = self.stub.UploadConfigFile(chunks)
         print(upload_status.Message)
 
+    def upload_tgen_config(self):
+        filename = self.config.get('ConfFile', 'tgenpath')
+        chunks = self.get_file_chunks(filename)
+        upload_status = self.stub.TGenUploadConfigFile(chunks)
+        print(upload_status.Message)
+
     def start_test(self):
-        test_control = vsperf_pb2.ControlVsperf(testtype =
+        test_control = vsperf_pb2.ControlTGen(params =
+                                              self.config.get('TGen',
+                                                              'params'),
+                                              conffile =
+                                              self.config.get('TGen',
+                                                              'conffile'))
+        control_reply = self.stub.StartTest(test_control)
+        print(control_reply.message)
+
+    def start_tgen(self):
+        tgen_control = vsperf_pb2.ControlVsperf(testtype =
                                                 self.config.get('Testcase',
                                                                 'test'),
                                                 conffile =
@@ -70,12 +86,33 @@ class VsperfClient(object):
         install_reply = self.stub.VsperfInstall(hostinfo)
         print(install_reply.message)
 
+    def collectd_install(self):
+        hostinfo = vsperf_pb2.HostInfo(ip=self.config.get('Host', 'ip'),
+                                       uname=self.config.get('Host', 'uname'),
+                                       pwd=self.config.get('Host', 'pwd'))
+        install_reply = self.stub.CollectdInstall(hostinfo)
+        print(install_reply.message)
+
+    def tgen_install(self):
+        tgeninfo = vsperf_pb2.HostInfo(ip=self.config.get('TGen', 'ip'),
+                                       uname=self.config.get('TGen', 'uname'),
+                                       pwd=self.config.get('TGen', 'pwd'))
+        install_reply = self.stub.TGenInstall(tgeninfo)
+        print(install_reply.message)
+
     def host_connect(self):
         hostinfo = vsperf_pb2.HostInfo(ip=self.config.get('Host', 'ip'),
                                        uname=self.config.get('Host', 'uname'),
                                        pwd=self.config.get('Host', 'pwd'))
-        install_reply = self.stub.HostConnect(hostinfo)
-        print(install_reply.message)
+        connect_reply = self.stub.HostConnect(hostinfo)
+        print(connect_reply.message)
+
+    def tgen_connect(self):
+        tgeninfo = vsperf_pb2.HostInfo(ip=self.config.get('TGen', 'ip'),
+                                       uname=self.config.get('TGen', 'uname'),
+                                       pwd=self.config.get('TGen', 'pwd'))
+        connect_reply = self.stub.TGenHostConnect(tgeninfo)
+        print(connect_reply.message)
 
     def get_file_chunks(self, filename):
         with open(filename, 'rb') as f:
@@ -89,9 +126,14 @@ class VsperfClient(object):
 def run():
     client = VsperfClient()
     menuItems = [
-        {"Connect to Host": client.host_connect},
+        {"Connect to DUT Host": client.host_connect},
         {"Install VSPERF": client.vsperf_install},
-        {"Upload Configuration File": client.upload_config},
+        {"Connect to TGen Host": client.tgen_connect},
+        {"Install TGen ": client.tgen_install},
+        {"Install Collectd": client.collectd_install},
+        {"Upload TGen Configuration File": client.upload_tgen_config},
+        {"Start TGen ": client.start_tgen},
+        {"Upload Test Configuration File": client.upload_config},
         {"Start Test": client.start_test},
         {"Exit": sys.exit}
     ]

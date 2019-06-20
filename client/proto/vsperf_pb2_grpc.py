@@ -39,6 +39,36 @@ class ControllerStub(object):
         request_serializer=vsperf__pb2.StatusQuery.SerializeToString,
         response_deserializer=vsperf__pb2.StatusReply.FromString,
         )
+    self.TGenHostConnect = channel.unary_unary(
+        '/vsperf.Controller/TGenHostConnect',
+        request_serializer=vsperf__pb2.HostInfo.SerializeToString,
+        response_deserializer=vsperf__pb2.StatusReply.FromString,
+        )
+    self.TGenInstall = channel.unary_unary(
+        '/vsperf.Controller/TGenInstall',
+        request_serializer=vsperf__pb2.HostVerInfo.SerializeToString,
+        response_deserializer=vsperf__pb2.StatusReply.FromString,
+        )
+    self.TGenUploadConfigFile = channel.stream_unary(
+        '/vsperf.Controller/TGenUploadConfigFile',
+        request_serializer=vsperf__pb2.ConfFile.SerializeToString,
+        response_deserializer=vsperf__pb2.UploadStatus.FromString,
+        )
+    self.StartTGen = channel.unary_unary(
+        '/vsperf.Controller/StartTGen',
+        request_serializer=vsperf__pb2.ControlTGen.SerializeToString,
+        response_deserializer=vsperf__pb2.StatusReply.FromString,
+        )
+    self.TGenStatus = channel.unary_unary(
+        '/vsperf.Controller/TGenStatus',
+        request_serializer=vsperf__pb2.StatusQuery.SerializeToString,
+        response_deserializer=vsperf__pb2.StatusReply.FromString,
+        )
+    self.CollectdInstall = channel.unary_unary(
+        '/vsperf.Controller/CollectdInstall',
+        request_serializer=vsperf__pb2.HostInfo.SerializeToString,
+        response_deserializer=vsperf__pb2.StatusReply.FromString,
+        )
 
 
 class ControllerServicer(object):
@@ -80,6 +110,48 @@ class ControllerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def TGenHostConnect(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def TGenInstall(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def TGenUploadConfigFile(self, request_iterator, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def StartTGen(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def TGenStatus(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def CollectdInstall(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_ControllerServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -106,6 +178,36 @@ def add_ControllerServicer_to_server(servicer, server):
       'TestStatus': grpc.unary_unary_rpc_method_handler(
           servicer.TestStatus,
           request_deserializer=vsperf__pb2.StatusQuery.FromString,
+          response_serializer=vsperf__pb2.StatusReply.SerializeToString,
+      ),
+      'TGenHostConnect': grpc.unary_unary_rpc_method_handler(
+          servicer.TGenHostConnect,
+          request_deserializer=vsperf__pb2.HostInfo.FromString,
+          response_serializer=vsperf__pb2.StatusReply.SerializeToString,
+      ),
+      'TGenInstall': grpc.unary_unary_rpc_method_handler(
+          servicer.TGenInstall,
+          request_deserializer=vsperf__pb2.HostVerInfo.FromString,
+          response_serializer=vsperf__pb2.StatusReply.SerializeToString,
+      ),
+      'TGenUploadConfigFile': grpc.stream_unary_rpc_method_handler(
+          servicer.TGenUploadConfigFile,
+          request_deserializer=vsperf__pb2.ConfFile.FromString,
+          response_serializer=vsperf__pb2.UploadStatus.SerializeToString,
+      ),
+      'StartTGen': grpc.unary_unary_rpc_method_handler(
+          servicer.StartTGen,
+          request_deserializer=vsperf__pb2.ControlTGen.FromString,
+          response_serializer=vsperf__pb2.StatusReply.SerializeToString,
+      ),
+      'TGenStatus': grpc.unary_unary_rpc_method_handler(
+          servicer.TGenStatus,
+          request_deserializer=vsperf__pb2.StatusQuery.FromString,
+          response_serializer=vsperf__pb2.StatusReply.SerializeToString,
+      ),
+      'CollectdInstall': grpc.unary_unary_rpc_method_handler(
+          servicer.CollectdInstall,
+          request_deserializer=vsperf__pb2.HostInfo.FromString,
           response_serializer=vsperf__pb2.StatusReply.SerializeToString,
       ),
   }

@@ -53,7 +53,7 @@ services:
       - testapi-logs:/home/testapi/logs
     environment:
       - mongodb_url=mongodb://opnfv-mongo:27017/
-      - base_url=http://10.10.120.22:8000
+      - base_url=http://0.0.0.0:8000
     ports:
       - "8000:8000"
       - "8001:8001"
@@ -73,6 +73,7 @@ services:
   postgres:
     image: postgres
     restart: always
+    environment:
       POSTGRES_USER: data
       POSTGRES_PASSWORD: data
       POSTGRES_DB: data

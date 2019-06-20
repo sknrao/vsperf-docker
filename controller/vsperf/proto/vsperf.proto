@@ -22,10 +22,21 @@ service Controller {
   rpc UploadConfigFile (stream ConfFile) returns (UploadStatus) {}
   rpc StartTest (ControlVsperf) returns (StatusReply) {}
   rpc TestStatus (StatusQuery) returns (StatusReply) {}
+  rpc TGenHostConnect (HostInfo) returns (StatusReply) {}
+  rpc TGenInstall (HostVerInfo) returns (StatusReply) {}
+  rpc TGenUploadConfigFile (stream ConfFile) returns (UploadStatus) {}
+  rpc StartTGen (ControlTGen) returns (StatusReply) {}
+  rpc TGenStatus (StatusQuery) returns (StatusReply) {}
+  rpc CollectdInstall (HostInfo) returns (StatusReply) {}
 }
 
 message ControlVsperf {
   string testtype = 1;
+  string conffile = 2;
+}
+
+message ControlTGen {
+  string params = 1;
   string conffile = 2;
 }
 
@@ -37,6 +48,13 @@ message HostInfo {
   string ip = 1;
   string uname = 2;
   string pwd = 3;
+}
+
+message HostVerInfo {
+  string ip = 1;
+  string uname = 2;
+  string pwd = 3;
+  string version = 4;
 }
 
 message StatusQuery {

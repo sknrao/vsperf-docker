@@ -59,14 +59,21 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         self.user = None
         self.pwd = None
         self.vsperf_conf = None
+        self.tgen_client = None
+        self.tgen = None
+        self.tgen_user = None
+        self.tgen_pwd = None
+        self.tgen_conf = None
         self.scenario = None
         self.conffile = "vsperf.conf"
+        # Default TGen is T-Rex
+        self.tgen_conffile = "trex_cfg.yml"
 
     def setup(self):
         """
         Performs Setup of the client.
         """
-        # copy vsperf conf to VM
+        # Just connect to VM.
         self.client = ssh.SSH(host=self.dut, user=self.user,
                               password=self.pwd)
         self.client.wait()
@@ -147,6 +154,66 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         self.run_test()
         return vsperf_pb2.StatusReply(message="Test Successfully running...")
 
+###### Traffic Generator Related functions ####
+    def TGenHostConnect(self, request, context):
+        """
+        Connect to TGen-Node
+        """
+        self.tgen = request.ip
+        self.tgen_user = request.uname
+        self.tgen_pwd = request.pwd
+        self.TgenSetup()
+        return vsperf_pb2.StatusReply(message="Successfully Connected")
+
+    def TgenSetup(self):
+        """
+        Setup the T-Gen Client
+        """
+        # Just connect to VM.
+        self.tgen_client = ssh.SSH(host=self.tgen, user=self.tgen_user,
+                                   password=self.tgen_pwd)
+        self.tgen_client.wait()
+
+    def TGenInstall(self, request, context):
+        """
+        Install Traffic generator on the node.
+        """
+
+    def TGenUploadConfigFile(self, request, context):
+        """
+        Handle upload config-file command from client
+        """
+        filename = self.tgen_conffile
+        self.save_chunks_to_file(request, filename)
+        self.upload_config()
+        return vsperf_pb2.UploadStatus(Message="Successfully Uploaded",
+                                       Code=1)
+    def upload_tgen_config(self):
+        """
+        Perform file upload.
+        """
+        self.tgen_client.put_file(self.trex_conffile, '/root/trex_cfg.yml')
+
+    def install_tgen(self):
+        """
+        Perform actual installation
+        """
+        download_cmd ="git clone https://github.com/cisco-system-traffic-\
+            generator/trex-core.git"
+        self.tgen_client.run(download_cmd)
+        install_cmd = "mv /root/trex-core /root/trex_latest"
+        self.tgen_client.run(install_cmd)
+
+    def StartTGen(self, request, context):
+        """
+        Handle start-test command from client
+        """
+        self.trex_conf = request.conffile
+        self.trex_params = request.params
+        run_cmd = "/root/trex_latest/scripts/t-rex-64"
+        run_cmd += self.trex_params
+        self.tgen_client.run(run_cmd)
+        return vsperf_pb2.StatusReply(message="T-Rex Successfully running...")
 
 def serve():
     """
