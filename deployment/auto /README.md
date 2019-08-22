@@ -11,7 +11,7 @@ Required commands:
 
 sudo docker-compose build
 
-2. Run both the individual services.
+2. Run the individual services.
 
 sudo docker-compose run controller
 
