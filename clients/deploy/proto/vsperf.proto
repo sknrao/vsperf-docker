@@ -27,7 +27,26 @@ service Controller {
   rpc TGenUploadConfigFile (stream ConfFile) returns (UploadStatus) {}
   rpc StartTGen (ControlTGen) returns (StatusReply) {}
   rpc TGenStatus (StatusQuery) returns (StatusReply) {}
-  rpc CollectdInstall (HostInfo) returns (StatusReply) {}
+  rpc CollectdInstall (HostInfo) returns (StatusReply) {} 
+  rpc CollectdUploadConfig (stream ConfFile) returns (UploadStatus) {}
+  rpc StartBeats (HostInfo) returns (StatusReply) {}
+  rpc RemoveVsperf (HostInfo) returns (StatusReply) {}
+  rpc RemoveResultFolder (HostInfo) returns (StatusReply) {}
+  rpc RemoveUploadedConfig (HostInfo) returns (StatusReply) {}
+  rpc RemoveCollectd (HostInfo) returns (StatusReply) {}
+  rpc RemoveEverything (HostInfo) returns (StatusReply) {}
+  rpc DutHugepageConfig (HugepConf) returns (StatusReply) {}
+  rpc TerminateVsperf (HostInfo) returns (StatusReply) {}
+  rpc CheckDependecies (HostInfo) returns (StatusReply) {}
+  rpc SanityNICCheck (HostInfo) returns (StatusReply) {}
+  rpc SanityCollectdCheck (HostInfo) returns (StatusReply) {}
+  rpc SanityVNFpath (HostInfo) returns (StatusReply) {}
+  rpc SanityVSPERFCheck (HostInfo) returns (StatusReply) {}
+  rpc SanityVSPERFOptionsCheck (HostInfo) returns (StatusReply) {}
+  rpc GetVSPERFConffromDUT (HostInfo) returns (StatusReply) {}
+  rpc SanityTgenConnDUTCheck (HostInfo) returns (StatusReply) {}
+  rpc SanityTgenCheck (HostInfo) returns (StatusReply) {}
+  rpc DUTvsperfTestAvailability (HostInfo) returns (StatusReply) {}
 }
 
 message ControlVsperf {
@@ -40,6 +59,10 @@ message ControlTGen {
   string conffile = 2;
 }
 
+message LogDir {
+  string directory = 1;
+}
+
 message ConfFile {
   bytes Content = 1;
 }
@@ -48,6 +71,11 @@ message HostInfo {
   string ip = 1;
   string uname = 2;
   string pwd = 3;
+}
+
+message HugepConf {
+  string hpmax = 1;
+  string hprequested = 2;
 }
 
 message HostVerInfo {
