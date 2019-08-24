@@ -1,7 +1,7 @@
 version: '2'
 
 services:
-  deploy:
+  testcontrol:
     build:
       context: ./controller
     volumes:
@@ -9,7 +9,7 @@ services:
     env_file:
       - ./controller/list.env
     ports:
-      - 50051
+      - 4000
  
 
     

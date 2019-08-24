@@ -80,7 +80,8 @@ def vsperf_install():
                 continue
             elif idx == 5:
                 print(
-                    "VSPERF is Already Installed on DUT-Host..........................[OK]\n")
+                    "VSPERF is Already Installed on DUT-Host..........................."\
+                    ".......[OK]\n")
             else:
                 download_cmd = "git clone https://gerrit.opnfv.org/gerrit/vswitchperf"
                 DUT_CLIENT.run(download_cmd)
@@ -113,25 +114,6 @@ def tgen_install():
         # PICs and extablished route between your DUT and Test Device.
         print(
             "Traffic Generetor Host has now T-rex Installed...........................[OK]\n")
-
-
-def upload_test_config_file():
-    """
-    #Upload Test Config File on DUT
-    """
-    localpath = '/home/shaileshchauhan/Desktop/Container_2/controller/vsperf/vsperf.conf'
-    remotepath = '~/vsperf.conf'
-    #localpath = '/usr/src/app/vsperf/vsperf.conf'
-    #remotepath = '~/vsperf.conf'
-    check_test_config_cmd = "find ~/ -maxdepth 1 -name '{}'".format(
-        remotepath[2:])
-    check_test_result = str(DUT_CLIENT.execute(check_test_config_cmd)[1])
-    if remotepath[2:] in check_test_result:
-        DUT_CLIENT.run("rm -f {}".format(remotepath[2:]))
-    DUT_CLIENT.put_file(localpath, remotepath)
-    print(
-        "Test Configuration File Uploaded on DUT-Host.............................[OK] \n ")
-
 
 def upload_tgen_config_file():
     """
@@ -212,7 +194,7 @@ def start_tgen():
     run_cmd += TGEN_PARAM
     TGEN_CLIENT.send_command(run_cmd)
     print(
-        "T-Rex Successfully running..........................................[OK]\n")
+        "T-Rex Successfully running...............................................[OK]\n")
 
 
 def dut_hugepage_config():
@@ -270,29 +252,24 @@ def sanity_nic_check():
     """
     Check either NIC PCI ids are Correctly placed or not
     """
-    trex_conf_path = open('/usr/src/app/vsperf/trex_cfg.yaml')
-    trex_conf_read = trex_conf_path.readlines()
-    for i in trex_conf_read:
-        if 'interfaces' in i:
-            nic_pic_ids_list = [i.split("\"")[1], i.split("\"")[3]]
-            trex_nic_pic_id_cmd = "lspci | egrep -i --color 'network|ethernet'"
-            trex_nic_pic_id = str(TGEN_CLIENT.execute(
-                trex_nic_pic_id_cmd)[1]).split('\n')
-            acheck = 0
-            for k in trex_nic_pic_id:
-                for j in nic_pic_ids_list:
-                    if j in k:
-                        print(
-                            'NIC PCI id {} is existing on Traffic Gen'.format(j))
-                        acheck += 1
-                    else:
-                        pass
-            if acheck == 2:
-                print(
-                    "Both the NIC PCI Ids are Correctly configured on TGen-Host.......[OK] \n ")
+    trex_conf_path = "cat /etc/trex_cfg.yaml | grep interfaces"
+    trex_conf_read = TGEN_CLIENT.execute(trex_conf_path)[1]
+    nic_pid_ids_list = [trex_conf_read.split("\"")[1], trex_conf_read.split("\"")[3]]
+    trex_nic_pic_id_cmd = "lspci | egrep -i --color 'network|ethernet'"
+    trex_nic_pic_id = str(TGEN_CLIENT.execute(trex_nic_pic_id_cmd)[1]).split('\n')
+    acheck = 0
+    for k in trex_nic_pic_id:
+        for j in nic_pid_ids_list:
+            if j in k:
+                acheck += 1
             else:
-                print(
-                    "You configured NIC PCI Ids Wrong in TGen-Host...................[FAILED]")
+                pass
+    if acheck == 2:
+        print("Both the NIC PCI Ids are Correctly"\
+            " configured on TGen-Host...............[OK]\n")
+    else:
+        print("You configured NIC PCI Ids Wrong in "\
+            "TGen-Host............................[OK]\n")
 
 
 def sanity_collectd_check():
@@ -318,29 +295,6 @@ def sanity_collectd_check():
         print(
             "Collectd is not installed yet........................................[Failed]\n")
 
-
-def sanity_vnf_path():
-    """
-    Check if VNF image available on the mention path in Test Config File
-    """
-    # fetch the VNF path we placed in vsperf.conf file
-    vsperf_conf_path = open('/usr/src/app/vsperf/vsperf.conf')
-    vsperf_conf_read = vsperf_conf_path.readlines()
-    for i in vsperf_conf_read:
-        if 'GUEST_IMAGE' in i:
-            vnf_image_path = i.split("'")[1]
-            vnf_path_check_cmd = "find {}".format(vnf_image_path)
-            vnf_path_check_result = str(
-                DUT_CLIENT.execute(vnf_path_check_cmd)[1])
-            if vnf_image_path in vnf_path_check_result:
-                print(
-                    "Test Configratuion file has Correct VNF path .....[OK]\n ")
-            else:
-                print(
-                    "Test Configuration file has wrongly placed VNF path information \n\
-                    VNF is not available on DUT-Host................................[Failed]\n ")
-
-
 def sanity_vsperf_check():
     """
     We have to make sure that VSPERF install correctly
@@ -359,13 +313,14 @@ def sanity_vsperf_check():
                 continue
             elif idx == 5:
                 print(
-                    "VSPERF Installed Correctly and Working fine........................[OK]")
+                    "VSPERF Installed Correctly and Working fine.........................."\
+                    "....[OK]\n")
             else:
                 print(
-                    "VSPERF Does Not Installed Correctly , INSTALL IT AGAIN........[Critical]")
+                    "VSPERF Does Not Installed Correctly , INSTALL IT AGAIN........[Critical]\n")
         else:
             print(
-                "VSPERF Does Not Installed Correctly , INSTALL IT AGAIN............[Critical]")
+                "VSPERF Does Not Installed Correctly , INSTALL IT AGAIN............[Critical]\n")
             break
 
 
@@ -378,7 +333,7 @@ def sanity_tgen_conn_dut_check():
         DUT_CLIENT.execute(tgen_connectivity_check_cmd)[0])
     if tgen_connectivity_check_result == 0:
         print(
-            "DUT-Host is successfully reachable to Traffic Generator Host............[OK]\n")
+            "DUT-Host is successfully reachable to Traffic Generator Host.............[OK]\n")
     else:
         print(
             "DUT-host is unsuccessful to reach the Traffic Generator Host..............[Failed]")
@@ -427,11 +382,9 @@ dut_hugepage_config()
 check_dependecies()
 sanity_nic_check()
 start_tgen()
+dut_vsperf_test_availability()
 
 if 'yes' in SANITY.lower():
-    sanity_vnf_path()
-    sanity_nic_check()
     sanity_collectd_check()
     sanity_vsperf_check()
     sanity_tgen_conn_dut_check()
-    dut_vsperf_test_availability()

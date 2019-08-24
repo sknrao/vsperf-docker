@@ -1,9 +1,20 @@
-This folder contains the source for VSPERF command and control container.
-To build a new container, use the Dockerfile.
-```sh
-docker build . -t vsperftest:latest
-```
-Command to run the container:
-```sh
-docker run -d -p 4000:4000 -v /tmp:/usr/src/app vsperfctest:latest
-```
+This repository is to explore the containerization of OPNFV-VSPERF.
+Once there is an agreement, this will get merged with original vsperf repo.
+
+This container used to start the server for the test client.
+
+
+Required commands:
+
+1. run the docker-compose file
+
+docker-compose build
+
+2. Run the individual service which will start server for test client.
+
+docker-compose up testcontrolinter
+
+
+ 
+
+

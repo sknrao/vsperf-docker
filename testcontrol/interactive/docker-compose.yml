@@ -1,15 +1,13 @@
 version: '2'
 
 services:
-  deploy:
+  testcontrolinter:
     build:
       context: ./controller
     volumes:
       - ./controller/vsperf:/vsperf
-    env_file:
-      - ./controller/list.env
     ports:
-      - 50051
+      - 4000:4000
  
 
     
