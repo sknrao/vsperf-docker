@@ -5,7 +5,7 @@ This container designed to start the server for the deploy client.
 
 Required commands:
 
-1. Run the docker-compose file
+1. Build the docker-compose file
 
 docker-compose build
 
