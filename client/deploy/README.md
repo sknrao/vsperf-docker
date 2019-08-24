@@ -8,6 +8,6 @@ If you would like to upload new T-rex and collectd configuration file user have 
 
 T-rex and collectd configuration file should be saved with trex_cfg.yaml and collectd.conf respectively.
 
-In order to use deploy client, user must have to start server which can we achieve by running deployment/interactive container.
+In order to use deploy client, user must have to start server which can be achieve by running deployment/interactive container.
 
 User can run the script with python3.
