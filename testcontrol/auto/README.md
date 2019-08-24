@@ -7,7 +7,7 @@ User have to provide all the DUT-host related User_name and password on list.env
 
 Required commands:
 
-1. run the docker-compose file
+1. Build the docker-compose file
 
 docker-compose build
 
