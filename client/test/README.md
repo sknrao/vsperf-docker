@@ -6,6 +6,6 @@ For uploading test configuration file user have two choices.
 
 2. When running client ask for path use specific path where configuration file exist.
 
-In order to use deploy client, user must have to start server which can we achieve by running deployment/interactive container.
+In order to use deploy client, user must have to start server which can be achieve by running deployment/interactive container.
 
 User can run the script with python3.
