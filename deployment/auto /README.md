@@ -13,7 +13,7 @@ docker-compose build
 
 2. Run both the individual services.
 
-sudo docker-compose run controller
+docker-compose run controller
 
 User can analyze the outputs of docker-compose run and manage the further configurations.
 Everything looks good for you then you can run the testcontrol auto container and perform vsperf test.
