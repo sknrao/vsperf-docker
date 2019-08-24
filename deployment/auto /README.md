@@ -7,7 +7,7 @@ User have to provide all the DUT-Host and Traffic genretor related User_name and
 
 Required commands:
 
-1. run the docker-compose file
+1. Build the docker-compose file
 
 docker-compose build
 
