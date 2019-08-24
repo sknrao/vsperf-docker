@@ -6,7 +6,7 @@ This container used to start the server for the test client.
 
 Required commands:
 
-1. run the docker-compose file
+1. Build the docker-compose file
 
 docker-compose build
 
