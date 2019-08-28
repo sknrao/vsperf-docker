@@ -58,7 +58,7 @@ def tgen_connect():
     """
     global TGEN_CLIENT
     TGEN_CLIENT = ssh.SSH(host=TGEN_IP, user=TGEN_USER, password=TGEN_PWD)
-    print("Traffic-Host Gen Successfully Connected .................................[OK] \n ")
+    print("Traffic Generator Successfully Connected ...............................[OK] \n ")
 
 
 def vsperf_install():
@@ -104,7 +104,7 @@ def tgen_install():
     tgen_start_cmd_result = int(TGEN_CLIENT.execute(tgen_start_check)[0])
     if tgen_start_cmd_result == 0:
         print(
-            "Traffic Generetor has T-rex Installed....................................[OK]\n")
+            "Traffic Generator has T-rex Installed....................................[OK]\n")
     else:
         download_cmd = "git clone https://github.com/cisco-system-traffic-generator/trex-core"
         TGEN_CLIENT.run(download_cmd)
@@ -132,7 +132,7 @@ def upload_tgen_config_file():
     TGEN_CLIENT.run(
         "echo {} | sudo -S mv ~/{} /etc/".format(TGEN_PWD, remotepath[2:]), pty=True)
     print(
-        "Traffic Gen Configuration File Uploaded on TGen-Host.....................[OK]\n")
+        "T-rex Configuration File Uploaded on TGen-Host...........................[OK]\n")
 
 
 def install_collectd():
@@ -143,7 +143,7 @@ def install_collectd():
     check_test_result = str(DUT_CLIENT.execute(check_collectd_config_cmd)[1])
     if "collectd" in check_test_result:
         print(
-            'Collectd Install Successfully on DUT-Host................................[OK]\n')
+            'Collectd Installed Successfully on DUT-Host..............................[OK]\n')
     else:
         #DUT_CLIENT.run("echo {} | sudo -S rm -r -f /opt/collectd".format(DUT_PWD))
         #DUT_CLIENT.run("echo {} | sudo -S rm -r -f ~/collectd".format(DUT_PWD))
@@ -159,7 +159,7 @@ def install_collectd():
         install_cmd += "echo '{}' | sudo -S make install".format(DUT_PWD)
         DUT_CLIENT.run(install_cmd, pty=True)
         print(
-            'Collectd Install Successfully on DUT-Host.............................[OK]\n ')
+            'Collectd Installed Successfully on DUT-Host.............................[OK]\n ')
 
 
 def collectd_upload_config():
@@ -368,7 +368,7 @@ def dut_vsperf_test_availability():
             You can perform Test!")
     else:
         print("DUT-Host is busy right now, Wait for some time\n\
-            Always Check availability before Running Test!")
+            Always Check availability before Running Test!\n")
 
 
 host_connect()
@@ -383,6 +383,11 @@ check_dependecies()
 sanity_nic_check()
 start_tgen()
 dut_vsperf_test_availability()
+
+print("\n\nIF you are getting any Failed or Critical message!!!\n" \
+      "Please follow this steps:\n"
+      "1. Make necessory changes before running VSPERF TEST\n"\
+      "2. Re-Run the auto deployment container")
 
 if 'yes' in SANITY.lower():
     sanity_collectd_check()

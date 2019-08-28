@@ -18,10 +18,17 @@ package vsperf;
 
 service Controller {
   rpc HostConnect (HostInfo) returns (StatusReply) {}
+  rpc VsperfInstall (HostInfo) returns (StatusReply) {}
+  rpc TGenHostConnect (HostInfo) returns (StatusReply) {}
+  rpc TGenInstall (HostVerInfo) returns (StatusReply) {}
+  rpc TGenUploadConfigFile (ConfFile) returns (UploadStatus) {}
+  rpc CollectdInstall (HostInfo) returns (StatusReply) {} 
+  rpc CollectdUploadConfig (ConfFile) returns (UploadStatus) {}
+  rpc DutHugepageConfig (HugepConf) returns (StatusReply) {}
+  rpc CheckDependecies (HostInfo) returns (StatusReply) {}
   rpc UploadConfigFile (ConfFile) returns (UploadStatus) {}
   rpc StartTest (ControlVsperf) returns (StatusReply) {}
   rpc TestStatus (StatusQuery) returns (StatusReply) {}
-  rpc TGenHostConnect (HostInfo) returns (StatusReply) {}
   rpc StartTGen (ControlTGen) returns (StatusReply) {}
   rpc StartBeats (HostInfo) returns (StatusReply) {}
   rpc RemoveVsperf (HostInfo) returns (StatusReply) {}
@@ -38,7 +45,6 @@ service Controller {
   rpc SanityCPUAllocationCheck (HostInfo) returns (StatusReply) {}
   rpc DUTvsperfTestAvailability (HostInfo) returns (StatusReply) {}
   rpc GetVSPERFConffromDUT (HostInfo) returns (StatusReply) {}
-  
 }
 
 message ControlVsperf {

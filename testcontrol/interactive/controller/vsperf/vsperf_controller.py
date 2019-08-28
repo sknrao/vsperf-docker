@@ -61,11 +61,13 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         Initialization
         """
         self.client = None
+        self.dut_check = None
         self.dut = None
         self.user = None
         self.pwd = None
         self.vsperf_conf = None
         self.tgen_client = None
+        self.tgen_check = None
         self.tgen = None
         self.tgen_user = None
         self.tgenpwd = None
@@ -80,6 +82,8 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         # Default TGen is T-Rex
         self.trex_conffile = "trex_cfg.yml"
         self.collectd_conffile = "collectd.conf"
+        self.test_upload_check = 0
+        self.sanity_check_done_list = list()
 
     def setup(self):
         """
@@ -96,6 +100,7 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         # self.client._put_file_shell(self.conffile, '~/vsperf.conf')
         self.client.put_file(self.conffile, '~/{}'.format(self.conffile))
+        print("No")
 
     def run_test(self):
         """
@@ -120,6 +125,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         Chechk for the test status after performing test
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
         testtype_list = request.testtype.split(",")
         test_success = []
         test_failed = []
@@ -149,7 +158,7 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
                 testtype_list_len -= 1
         if len(testtype_list) == len(test_success):
             return vsperf_pb2.StatusReply(message="All Test Successfully Completed on DUT-Host" \
-                                          "Results... [OK]")
+                                          "\nResults... [OK]")
         if not test_success:
             return vsperf_pb2.StatusReply(
                 message="All Test Failed on DUT-Host \nResults... [Failed]")
@@ -165,6 +174,8 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         self.user = request.uname
         self.pwd = request.pwd
         self.setup()
+        check_cmd = "ls -l"
+        self.dut_check = int(self.client.execute(check_cmd)[0])
         return vsperf_pb2.StatusReply(message="Successfully Connected")
 
     def save_chunks_to_file(self, chunks, filename):
@@ -178,6 +189,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         Handle upload config-file command from client
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
         chunks = request.Content
         filename = request.Filename
         self.conffile = filename
@@ -186,22 +201,47 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         # then upload the new file.
         check_test_config_cmd = "find ~/ -maxdepth 1 -name {}".format(filename)
         check_test_result = str(self.client.execute(check_test_config_cmd)[1])
-        if "vsperf.conf" in check_test_result:
+        if "{}".format(filename) in check_test_result:
             self.client.run("rm -f {}".format(filename))
         self.upload_config()
+        self.test_upload_check = 1
+        print("Hello")
         return vsperf_pb2.UploadStatus(Message="Successfully Uploaded", Code=1)
 
     def StartTest(self, request, context):
         """
         Handle start-test command from client
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
+        sanity_dict = {1:"Check installed VSPERF",
+                       2:"Check Test Config's VNF path is available on DUT-Host",
+                       3:"Check NIC PCIs is available on Traffic Generator",
+                       4:"Check CPU allocation on DUT-Host",
+                       5:"Check installed Collectd",
+                       6:"Check Connection between DUT-Host and Traffic Generator Host"}
+        sanity_dict_option_list = list(sanity_dict.keys())
+        remaining_sanity = [item for item in sanity_dict_option_list if item not in \
+                            self.sanity_check_done_list]
+        if remaining_sanity:
+            sanity_return_msg = ""
+            for i_sanity in remaining_sanity:
+                sanity_return_msg += sanity_dict[i_sanity] + "\n"
+            return vsperf_pb2.StatusReply(message="The following sanity checks are either not"\
+                    " performed yet or Does not satisfy test requirements" \
+                    "\n{}".format(sanity_return_msg))
+        if self.test_upload_check == 0:
+            return vsperf_pb2.StatusReply(message="Test File is not uploaded yet [!] " \
+                         "\nUpload Test Configuration File.")
         self.vsperf_conf = request.conffile
         self.testtype = request.testtype
         testtype_list = self.testtype.split(",")
         for test in testtype_list:
             self.scenario = test
             self.run_test()
-        return vsperf_pb2.StatusReply(message="Test Successfully running...")
+        return vsperf_pb2.StatusReply(message="Test Successfully Completed")
 
 ###### Traffic Generator Related functions ####
     def TGenHostConnect(self, request, context):
@@ -212,6 +252,8 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         self.tgen_user = request.uname
         self.tgenpwd = request.pwd
         self.tgen_setup()
+        check_tgen_cmd = "ls"
+        self.tgen_check = int(self.tgen_client.execute(check_tgen_cmd)[0])
         return vsperf_pb2.StatusReply(message="Successfully Connected")
 
     def tgen_setup(self):
@@ -227,6 +269,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         Start fileBeats on DUT
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
         run_cmd = "echo '{}' | sudo -S service filebeat start".format(self.pwd)
         #run_cmd = "sudo service filebeat start"
         self.client.run(run_cmd, pty=True)
@@ -236,11 +282,15 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         Before running test we have to make sure there is no other test running
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
         vsperf_ava_cmd = "ps -ef | grep -v grep | grep ./vsperf | awk '{print $2}'"
         vsperf_ava_result = len((self.client.execute(vsperf_ava_cmd)[1]).split("\n"))
         if vsperf_ava_result == 1:
-            return vsperf_pb2.StatusReply(message="DUT-Host is available for performing \
-                                                   VSPERF Test\nYou can perform Test!")
+            return vsperf_pb2.StatusReply(message="DUT-Host is available for performing" \
+                                                  " VSPERF Test\nYou can perform Test!")
         return vsperf_pb2.StatusReply(message="DUT-Host is busy right now, Wait for some time\n\
             Always Check availability before Running Test!")
 
@@ -293,6 +343,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         Handle VSPERF removal command from client
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
         self.vsperf_remove()
         return vsperf_pb2.StatusReply(message="Successfully VSPERF Removed")
 
@@ -300,6 +354,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         Terminate the VSPERF and kill processes
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
         stress_kill_cmd = "echo '{}' | sudo -S pkill stress &> /dev/null".format(
             self.pwd)
         python3_kill_cmd = "echo '{}' | sudo -S pkill python3 &> /dev/null".format(
@@ -347,6 +405,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         Handle result folder removal command from client
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
         self.result_folder_remove()
         return vsperf_pb2.StatusReply(
             message="Successfully VSPERF Results Removed")
@@ -355,6 +417,14 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         Handle all configuration file removal command from client
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
+        if self.tgen_check != 0:
+            return vsperf_pb2.StatusReply(message="TGen-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " TGen-Host.")
         self.remove_uploaded_config()
         return vsperf_pb2.StatusReply(
             message="Successfully All Uploaded Config Files Removed")
@@ -363,6 +433,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         Handle collectd removal command from client
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
         self.collectd_remove()
         return vsperf_pb2.StatusReply(
             message="Successfully Collectd Removed From DUT-Host")
@@ -371,6 +445,14 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         Handle of removing everything from DUT command from client
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
+        if self.tgen_check != 0:
+            return vsperf_pb2.StatusReply(message="TGen-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " TGen-Host.")
         self.vsperf_remove()
         self.result_folder_remove()
         self.remove_uploaded_config()
@@ -382,7 +464,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         Handle start-Tgen command from client
         """
-        self.trex_conf = request.conffile
+        if self.tgen_check != 0:
+            return vsperf_pb2.StatusReply(message="TGen-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " TGen-Host.")
         self.trex_params = request.params
         run_cmd = "cd trex_2.37/scripts ; "
         run_cmd += "./t-rex-64 "
@@ -394,6 +479,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         Check and verify collectd is able to run and start properly
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
         check_collectd_cmd = "find /opt -maxdepth 1 -name 'collectd'"
         check_test_result = str(self.client.execute(check_collectd_cmd)[1])
         if "collectd" in check_test_result:
@@ -402,6 +491,7 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
             check_collectd_status_cmd = "ps aux | grep collectd"
             check_collectd_status = str(self.client.execute(check_collectd_status_cmd)[1])
             if "/sbin/collectd" in check_collectd_status:
+                self.sanity_check_done_list.append(int(5))
                 return vsperf_pb2.StatusReply(message="Collectd is working Fine")
             return vsperf_pb2.StatusReply(message="Collectd Fail to Start, \
                                                    Install correctly before running Test")
@@ -412,12 +502,20 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         Check if VNF image available on the mention path in Test Config File
         """
         # fetch the VNF path we placed in vsperf.conf file
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
+        if self.test_upload_check == 0:
+            return vsperf_pb2.StatusReply(message="Test File is not uploaded yet [!] " \
+                         "\nUpload Test Configuration File.")
         vsperf_conf_path = 'cat ~/{} | grep "GUEST_IMAGE"'.format(self.conffile)
         vsperf_conf_read = self.client.execute(vsperf_conf_path)[1]
         vnf_image_path = vsperf_conf_read.split("'")[1]
         vnf_path_check_cmd = "find {}".format(vnf_image_path)
         vfn_path_check_result = str(self.client.execute(vnf_path_check_cmd)[1])
         if vnf_image_path in vfn_path_check_result:
+            self.sanity_check_done_list.append(int(2))
             return vsperf_pb2.StatusReply(message="Test Configratuion file has Correct "\
                 "VNF path information on DUT-Host.....[OK]")
         return vsperf_pb2.StatusReply(message='Test Configuration file has wrongly placed VNF '\
@@ -428,6 +526,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         We have to make sure that VSPERF install correctly
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
         vsperf_check_command = "source ~/vsperfenv/bin/activate ; cd vswitchperf* && "
         vsperf_check_command += "./vsperf --help"
         vsperf_check_cmd_result = str(self.client.execute(vsperf_check_command)[1])
@@ -442,6 +544,7 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
                 if idx < 5:
                     continue
                 elif idx == 5:
+                    self.sanity_check_done_list.append(int(1))
                     return vsperf_pb2.StatusReply(
                         message="VSPERF Installed Correctly and Working fine")
             return vsperf_pb2.StatusReply(message="VSPERF Does Not Installed Correctly ," \
@@ -453,6 +556,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         Check either NIC PCI ids are Correctly placed or not
         """
+        if self.tgen_check != 0:
+            return vsperf_pb2.StatusReply(message="TGen-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " TGen-Host.")
         trex_conf_path = "cat /etc/trex_cfg.yaml | grep interfaces"
         trex_conf_read = self.tgen_client.execute(trex_conf_path)[1]
         nic_pid_ids_list = [trex_conf_read.split("\"")[1], trex_conf_read.split("\"")[3]]
@@ -466,6 +573,7 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
                 else:
                     pass
         if acheck == 2:
+            self.sanity_check_done_list.append(int(3))
             return vsperf_pb2.StatusReply(message="Both the NIC PCI Ids are Correctly "\
                 "configured on TGen-Host..............")
         return vsperf_pb2.StatusReply(message="You configured NIC PCI Ids Wrong in "\
@@ -475,12 +583,17 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         We should confirm the DUT connectivity with the Tgen and Traffic Generator is working or not
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
         self.tgen_ip_address = request.ip
         tgen_connectivity_check_cmd = "ping {} -c 1".format(
             self.tgen_ip_address)
         tgen_connectivity_check_result = int(
             self.client.execute(tgen_connectivity_check_cmd)[0])
         if tgen_connectivity_check_result == 0:
+            self.sanity_check_done_list.append(int(6))
             return vsperf_pb2.StatusReply(
                 message="DUT-Host is successfully reachable to Traffic Generator......")
         return vsperf_pb2.StatusReply(message="DUT-Host is unsuccessful to reach the \
@@ -512,6 +625,7 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """compare to cpu_map list"""
         if len(list1) >= len(list2):
             if all(elem in list1  for elem in list2):
+                self.sanity_check_done_list.append(int(4))
                 return vsperf_pb2.StatusReply(message="CPU allocation properly done on" \
                     " DUT-Host.................[OK]")
             return vsperf_pb2.StatusReply(message="CPU allocation not done properly on " \
@@ -523,6 +637,13 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         check for cpu-allocation on DUT-Host
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
+        if self.test_upload_check == 0:
+            return vsperf_pb2.StatusReply(message="Test File is not uploaded yet [!] " \
+                         "\nUpload Test Configuration File.")
         read_setting_cmd = "source vsperfenv/bin/activate ; cd vswitchperf* && "
         read_setting_cmd += './vsperf --list-settings'
         default_vsperf_settings = ast.literal_eval(str(self.client.execute(read_setting_cmd)[1]))
@@ -537,9 +658,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
             vswitch_vhost_cpu_map = [str(x) for x in  ast.literal_eval(vswitch_cpu_map)]
 
         if vswitch_pmd_cpu_mask == 0 and vswitch_vhost_cpu_map == 0:
-            return vsperf_pb2.StatusReply(message="CPU allocation Check Done,\
-                \nNo vswitch_pmd_cpu_mask or vswitch_vhost_cpu_map assign in test config file" \
-                "Using Default Settings..[OK]\n")
+            self.sanity_check_done_list.append(int(4))
+            return vsperf_pb2.StatusReply(message="CPU allocation Check Done,"\
+                "\nNo vswitch_pmd_cpu_mask or vswitch_vhost_cpu_map assign in test" \
+                "configuration file.\nUsing Default Settings..[OK]\n")
         if vswitch_pmd_cpu_mask != 0 and vswitch_vhost_cpu_map == 0:
             core_id = self.cpumask2coreids(vswitch_pmd_cpu_mask)
             return self.cpu_allocation_check(default_vswitch_vhost_cpu_map, core_id)
@@ -553,6 +675,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         This will extract the vsperf test configuration from DUT-Host
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
         read_cmd = "cat ~/{}".format(self.conffile)
         read_cmd_output = str(self.client.execute(read_cmd)[1])
         return vsperf_pb2.StatusReply(message="{}".format(read_cmd_output))
@@ -565,7 +691,7 @@ def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     vsperf_pb2_grpc.add_ControllerServicer_to_server(
         VsperfController(), server)
-    server.add_insecure_port('[::]:4000')
+    server.add_insecure_port('[::]:50052')
     server.start()
     try:
         while True:

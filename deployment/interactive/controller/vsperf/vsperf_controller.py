@@ -58,6 +58,8 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         self.client = None
         self.dut = None
+        self.dut_check = None
+        self.tgen_check = None
         self.user = None
         self.pwd = None
         self.tgen_client = None
@@ -100,6 +102,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         Handle VSPERF install command from client
         """
         # print("Installing VSPERF")
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
         vsperf_check_cmd = "source ~/vsperfenv/bin/activate ; cd vswitchperf* && ./vsperf --help"
         vsperf_check_cmd_result = str(self.client.execute(vsperf_check_cmd)[1])
         vsperf_verify_list = [
@@ -126,6 +132,8 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         self.user = request.uname
         self.pwd = request.pwd
         self.setup()
+        check_cmd = "ls -l"
+        self.dut_check = int(self.client.execute(check_cmd)[0])
         return vsperf_pb2.StatusReply(message="Successfully Connected")
 
     def save_chunks_to_file(self, chunks, filename):
@@ -145,6 +153,8 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         self.tgen_user = request.uname
         self.tgenpwd = request.pwd
         self.tgen_setup()
+        check_tgen_cmd = "ls"
+        self.tgen_check = int(self.tgen_client.execute(check_tgen_cmd)[0])
         return vsperf_pb2.StatusReply(message="Successfully Connected")
 
     def tgen_setup(self):
@@ -160,6 +170,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         Install Traffic generator on the node.
         """
+        if self.tgen_check != 0:
+            return vsperf_pb2.StatusReply(message="TGen-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " TGen-Host.")
         kill_cmd = "pkill -f ./t-rex"
         self.tgen_client.send_command(kill_cmd)
         tgen_start_cmd = "cd trex_2.37/scripts && ./t-rex-64 -f cap2/dns.yaml -d 100 -m 1 --nc"
@@ -174,13 +188,17 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         install_cmd = "cd trex-core/linux_dpdk ; ./b configure ; ./b build"
         self.tgen_client.run(install_cmd)
         # before you setup your trex_cfg.yml make sure to do sanity check
-        # NIC PICs and extablished route between your DUT and Test Device.
+        # NIC PICs and establish route between your DUT and Test Device.
         return vsperf_pb2.StatusReply(message="Traffic Generetor has now T-rex Installed")
 
     def TGenUploadConfigFile(self, request, context):
         """
         Handle upload config-file command from client
         """
+        if self.tgen_check != 0:
+            return vsperf_pb2.StatusReply(message="TGen-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " TGen-Host.")
         filename = self.trex_conffile
         self.save_chunks_to_file(request, filename)
         check_trex_config_cmd = "echo {} | sudo -S find /etc -maxdepth 1 -name trex_cfg.yaml".\
@@ -229,6 +247,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         Install Collectd on DUT
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
         self.install_collectd()
         return vsperf_pb2.StatusReply(
             message="Collectd Successfully Installed on DUT-Host")
@@ -246,6 +268,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         Upload collectd config-file on DUT
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
         filename = self.collectd_conffile
         self.save_chunks_to_file(request, filename)
         self.upload_collectd_config()
@@ -258,6 +284,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         Configure the DUT system hugepage parameter from client
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
         self.hpmax = int(request.hpmax)
         self.hprequested = int(request.hprequested)
         hugepage_cmd = "echo '{}' | sudo -S mkdir -p /mnt/huge ; ".format(
@@ -292,6 +322,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         Check and Install required packages on DUT
         """
+        if self.dut_check != 0:
+            return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
+                                                   "\nMake sure to establish connection with" \
+                                                   " DUT-Host.")
         packages = ['python34-tkinter', 'sysstat', 'bc']
         for pkg in packages:
             # pkg_check_cmd = "dpkg -s {}".format(pkg) for ubuntu

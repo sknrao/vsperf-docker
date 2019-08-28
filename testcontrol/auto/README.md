@@ -3,7 +3,7 @@ Once there is an agreement, this will get merged with original vsperf repo.
 
 This containerized vsperf designed to handle vsperf-test automatically on DUT.
 
-User have to provide all the DUT-host related User_name and password on list.env.
+User have to provide all the DUT-host related Credentials and other environment variables in list.env.
 
 Required commands:
 

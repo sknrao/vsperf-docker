@@ -3,7 +3,7 @@ Once there is an agreement, this will get merged with original vsperf repo.
 
 This containerized vsperf designed to handle vsperf-setup automatically on DUT.
 
-User have to provide all the DUT-Host and Traffic genretor related User_name and password on list.env.
+User have to provide all the DUT-Host and Traffic generator related credentials in list.env.
 
 Required commands:
 
@@ -16,6 +16,6 @@ docker-compose build
 docker-compose run controller
 
 User can analyze the outputs of docker-compose run and manage the further configurations.
-Everything looks good for you then you can run the testcontrol auto container and perform vsperf test.
+Everything looks good for then user can run the testcontrol auto container and perform vsperf test.
 
 

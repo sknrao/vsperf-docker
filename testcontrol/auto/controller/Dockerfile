@@ -15,7 +15,7 @@ COPY ./vsperf ./vsperf
 
 VOLUME ["/usr/src/app/vsperf"]
 
-EXPOSE 4000
+EXPOSE 50052
 
 CMD ["python3", "./vsperf/vsperf_controller.py"]
 

@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='vsperf.proto',
   package='vsperf',
   syntax='proto3',
-  serialized_pb=_b('\n\x0cvsperf.proto\x12\x06vsperf\"3\n\rControlVsperf\x12\x10\n\x08testtype\x18\x01 \x01(\t\x12\x10\n\x08\x63onffile\x18\x02 \x01(\t\"/\n\x0b\x43ontrolTGen\x12\x0e\n\x06params\x18\x01 \x01(\t\x12\x10\n\x08\x63onffile\x18\x02 \x01(\t\"\x1b\n\x06LogDir\x12\x11\n\tdirectory\x18\x01 \x01(\t\"-\n\x08\x43onfFile\x12\x0f\n\x07\x43ontent\x18\x01 \x01(\t\x12\x10\n\x08\x46ilename\x18\x02 \x01(\t\"2\n\x08HostInfo\x12\n\n\x02ip\x18\x01 \x01(\t\x12\r\n\x05uname\x18\x02 \x01(\t\x12\x0b\n\x03pwd\x18\x03 \x01(\t\"/\n\tHugepConf\x12\r\n\x05hpmax\x18\x01 \x01(\t\x12\x13\n\x0bhprequested\x18\x02 \x01(\t\"F\n\x0bHostVerInfo\x12\n\n\x02ip\x18\x01 \x01(\t\x12\r\n\x05uname\x18\x02 \x01(\t\x12\x0b\n\x03pwd\x18\x03 \x01(\t\x12\x0f\n\x07version\x18\x04 \x01(\t\"\x1f\n\x0bStatusQuery\x12\x10\n\x08testtype\x18\x01 \x01(\t\"\x1e\n\x0bStatusReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"G\n\x0cUploadStatus\x12\x0f\n\x07Message\x18\x01 \x01(\t\x12&\n\x04\x43ode\x18\x02 \x01(\x0e\x32\x18.vsperf.UploadStatusCode*3\n\x10UploadStatusCode\x12\x0b\n\x07Unknown\x10\x00\x12\x06\n\x02Ok\x10\x01\x12\n\n\x06\x46\x61iled\x10\x02\x32\x92\n\n\nController\x12\x36\n\x0bHostConnect\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12<\n\x10UploadConfigFile\x12\x10.vsperf.ConfFile\x1a\x14.vsperf.UploadStatus\"\x00\x12\x39\n\tStartTest\x12\x15.vsperf.ControlVsperf\x1a\x13.vsperf.StatusReply\"\x00\x12\x38\n\nTestStatus\x12\x13.vsperf.StatusQuery\x1a\x13.vsperf.StatusReply\"\x00\x12:\n\x0fTGenHostConnect\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x37\n\tStartTGen\x12\x13.vsperf.ControlTGen\x1a\x13.vsperf.StatusReply\"\x00\x12\x35\n\nStartBeats\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x37\n\x0cRemoveVsperf\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12=\n\x12RemoveResultFolder\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12?\n\x14RemoveUploadedConfig\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x39\n\x0eRemoveCollectd\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12;\n\x10RemoveEverything\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12:\n\x0fTerminateVsperf\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x39\n\x0eSanityNICCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12>\n\x13SanityCollectdCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x38\n\rSanityVNFpath\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12<\n\x11SanityVSPERFCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x41\n\x16SanityTgenConnDUTCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x43\n\x18SanityCPUAllocationCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x44\n\x19\x44UTvsperfTestAvailability\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12?\n\x14GetVSPERFConffromDUT\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x0cvsperf.proto\x12\x06vsperf\"3\n\rControlVsperf\x12\x10\n\x08testtype\x18\x01 \x01(\t\x12\x10\n\x08\x63onffile\x18\x02 \x01(\t\"/\n\x0b\x43ontrolTGen\x12\x0e\n\x06params\x18\x01 \x01(\t\x12\x10\n\x08\x63onffile\x18\x02 \x01(\t\"\x1b\n\x06LogDir\x12\x11\n\tdirectory\x18\x01 \x01(\t\"-\n\x08\x43onfFile\x12\x0f\n\x07\x43ontent\x18\x01 \x01(\t\x12\x10\n\x08\x46ilename\x18\x02 \x01(\t\"2\n\x08HostInfo\x12\n\n\x02ip\x18\x01 \x01(\t\x12\r\n\x05uname\x18\x02 \x01(\t\x12\x0b\n\x03pwd\x18\x03 \x01(\t\"/\n\tHugepConf\x12\r\n\x05hpmax\x18\x01 \x01(\t\x12\x13\n\x0bhprequested\x18\x02 \x01(\t\"F\n\x0bHostVerInfo\x12\n\n\x02ip\x18\x01 \x01(\t\x12\r\n\x05uname\x18\x02 \x01(\t\x12\x0b\n\x03pwd\x18\x03 \x01(\t\x12\x0f\n\x07version\x18\x04 \x01(\t\"\x1f\n\x0bStatusQuery\x12\x10\n\x08testtype\x18\x01 \x01(\t\"\x1e\n\x0bStatusReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"G\n\x0cUploadStatus\x12\x0f\n\x07Message\x18\x01 \x01(\t\x12&\n\x04\x43ode\x18\x02 \x01(\x0e\x32\x18.vsperf.UploadStatusCode*3\n\x10UploadStatusCode\x12\x0b\n\x07Unknown\x10\x00\x12\x06\n\x02Ok\x10\x01\x12\n\n\x06\x46\x61iled\x10\x02\x32\xc3\r\n\nController\x12\x36\n\x0bHostConnect\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x38\n\rVsperfInstall\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12:\n\x0fTGenHostConnect\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x39\n\x0bTGenInstall\x12\x13.vsperf.HostVerInfo\x1a\x13.vsperf.StatusReply\"\x00\x12@\n\x14TGenUploadConfigFile\x12\x10.vsperf.ConfFile\x1a\x14.vsperf.UploadStatus\"\x00\x12:\n\x0f\x43ollectdInstall\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12@\n\x14\x43ollectdUploadConfig\x12\x10.vsperf.ConfFile\x1a\x14.vsperf.UploadStatus\"\x00\x12=\n\x11\x44utHugepageConfig\x12\x11.vsperf.HugepConf\x1a\x13.vsperf.StatusReply\"\x00\x12;\n\x10\x43heckDependecies\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12<\n\x10UploadConfigFile\x12\x10.vsperf.ConfFile\x1a\x14.vsperf.UploadStatus\"\x00\x12\x39\n\tStartTest\x12\x15.vsperf.ControlVsperf\x1a\x13.vsperf.StatusReply\"\x00\x12\x38\n\nTestStatus\x12\x13.vsperf.StatusQuery\x1a\x13.vsperf.StatusReply\"\x00\x12\x37\n\tStartTGen\x12\x13.vsperf.ControlTGen\x1a\x13.vsperf.StatusReply\"\x00\x12\x35\n\nStartBeats\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x37\n\x0cRemoveVsperf\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12=\n\x12RemoveResultFolder\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12?\n\x14RemoveUploadedConfig\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x39\n\x0eRemoveCollectd\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12;\n\x10RemoveEverything\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12:\n\x0fTerminateVsperf\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x39\n\x0eSanityNICCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12>\n\x13SanityCollectdCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x38\n\rSanityVNFpath\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12<\n\x11SanityVSPERFCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x41\n\x16SanityTgenConnDUTCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x43\n\x18SanityCPUAllocationCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x44\n\x19\x44UTvsperfTestAvailability\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12?\n\x14GetVSPERFConffromDUT\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x62\x06proto3')
 )
 
 _UPLOADSTATUSCODE = _descriptor.EnumDescriptor(
@@ -545,6 +545,46 @@ try:
           request_serializer=HostInfo.SerializeToString,
           response_deserializer=StatusReply.FromString,
           )
+      self.VsperfInstall = channel.unary_unary(
+          '/vsperf.Controller/VsperfInstall',
+          request_serializer=HostInfo.SerializeToString,
+          response_deserializer=StatusReply.FromString,
+          )
+      self.TGenHostConnect = channel.unary_unary(
+          '/vsperf.Controller/TGenHostConnect',
+          request_serializer=HostInfo.SerializeToString,
+          response_deserializer=StatusReply.FromString,
+          )
+      self.TGenInstall = channel.unary_unary(
+          '/vsperf.Controller/TGenInstall',
+          request_serializer=HostVerInfo.SerializeToString,
+          response_deserializer=StatusReply.FromString,
+          )
+      self.TGenUploadConfigFile = channel.unary_unary(
+          '/vsperf.Controller/TGenUploadConfigFile',
+          request_serializer=ConfFile.SerializeToString,
+          response_deserializer=UploadStatus.FromString,
+          )
+      self.CollectdInstall = channel.unary_unary(
+          '/vsperf.Controller/CollectdInstall',
+          request_serializer=HostInfo.SerializeToString,
+          response_deserializer=StatusReply.FromString,
+          )
+      self.CollectdUploadConfig = channel.unary_unary(
+          '/vsperf.Controller/CollectdUploadConfig',
+          request_serializer=ConfFile.SerializeToString,
+          response_deserializer=UploadStatus.FromString,
+          )
+      self.DutHugepageConfig = channel.unary_unary(
+          '/vsperf.Controller/DutHugepageConfig',
+          request_serializer=HugepConf.SerializeToString,
+          response_deserializer=StatusReply.FromString,
+          )
+      self.CheckDependecies = channel.unary_unary(
+          '/vsperf.Controller/CheckDependecies',
+          request_serializer=HostInfo.SerializeToString,
+          response_deserializer=StatusReply.FromString,
+          )
       self.UploadConfigFile = channel.unary_unary(
           '/vsperf.Controller/UploadConfigFile',
           request_serializer=ConfFile.SerializeToString,
@@ -558,11 +598,6 @@ try:
       self.TestStatus = channel.unary_unary(
           '/vsperf.Controller/TestStatus',
           request_serializer=StatusQuery.SerializeToString,
-          response_deserializer=StatusReply.FromString,
-          )
-      self.TGenHostConnect = channel.unary_unary(
-          '/vsperf.Controller/TGenHostConnect',
-          request_serializer=HostInfo.SerializeToString,
           response_deserializer=StatusReply.FromString,
           )
       self.StartTGen = channel.unary_unary(
@@ -658,6 +693,62 @@ try:
       context.set_details('Method not implemented!')
       raise NotImplementedError('Method not implemented!')
 
+    def VsperfInstall(self, request, context):
+      # missing associated documentation comment in .proto file
+      pass
+      context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+      context.set_details('Method not implemented!')
+      raise NotImplementedError('Method not implemented!')
+
+    def TGenHostConnect(self, request, context):
+      # missing associated documentation comment in .proto file
+      pass
+      context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+      context.set_details('Method not implemented!')
+      raise NotImplementedError('Method not implemented!')
+
+    def TGenInstall(self, request, context):
+      # missing associated documentation comment in .proto file
+      pass
+      context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+      context.set_details('Method not implemented!')
+      raise NotImplementedError('Method not implemented!')
+
+    def TGenUploadConfigFile(self, request, context):
+      # missing associated documentation comment in .proto file
+      pass
+      context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+      context.set_details('Method not implemented!')
+      raise NotImplementedError('Method not implemented!')
+
+    def CollectdInstall(self, request, context):
+      # missing associated documentation comment in .proto file
+      pass
+      context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+      context.set_details('Method not implemented!')
+      raise NotImplementedError('Method not implemented!')
+
+    def CollectdUploadConfig(self, request, context):
+      # missing associated documentation comment in .proto file
+      pass
+      context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+      context.set_details('Method not implemented!')
+      raise NotImplementedError('Method not implemented!')
+
+    def DutHugepageConfig(self, request, context):
+      # missing associated documentation comment in .proto file
+      pass
+      context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+      context.set_details('Method not implemented!')
+      raise NotImplementedError('Method not implemented!')
+
+    def CheckDependecies(self, request, context):
+      # missing associated documentation comment in .proto file
+      pass
+      context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+      context.set_details('Method not implemented!')
+      raise NotImplementedError('Method not implemented!')
+
     def UploadConfigFile(self, request, context):
       # missing associated documentation comment in .proto file
       pass
@@ -673,13 +764,6 @@ try:
       raise NotImplementedError('Method not implemented!')
 
     def TestStatus(self, request, context):
-      # missing associated documentation comment in .proto file
-      pass
-      context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-      context.set_details('Method not implemented!')
-      raise NotImplementedError('Method not implemented!')
-
-    def TGenHostConnect(self, request, context):
       # missing associated documentation comment in .proto file
       pass
       context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -806,6 +890,46 @@ try:
             request_deserializer=HostInfo.FromString,
             response_serializer=StatusReply.SerializeToString,
         ),
+        'VsperfInstall': grpc.unary_unary_rpc_method_handler(
+            servicer.VsperfInstall,
+            request_deserializer=HostInfo.FromString,
+            response_serializer=StatusReply.SerializeToString,
+        ),
+        'TGenHostConnect': grpc.unary_unary_rpc_method_handler(
+            servicer.TGenHostConnect,
+            request_deserializer=HostInfo.FromString,
+            response_serializer=StatusReply.SerializeToString,
+        ),
+        'TGenInstall': grpc.unary_unary_rpc_method_handler(
+            servicer.TGenInstall,
+            request_deserializer=HostVerInfo.FromString,
+            response_serializer=StatusReply.SerializeToString,
+        ),
+        'TGenUploadConfigFile': grpc.unary_unary_rpc_method_handler(
+            servicer.TGenUploadConfigFile,
+            request_deserializer=ConfFile.FromString,
+            response_serializer=UploadStatus.SerializeToString,
+        ),
+        'CollectdInstall': grpc.unary_unary_rpc_method_handler(
+            servicer.CollectdInstall,
+            request_deserializer=HostInfo.FromString,
+            response_serializer=StatusReply.SerializeToString,
+        ),
+        'CollectdUploadConfig': grpc.unary_unary_rpc_method_handler(
+            servicer.CollectdUploadConfig,
+            request_deserializer=ConfFile.FromString,
+            response_serializer=UploadStatus.SerializeToString,
+        ),
+        'DutHugepageConfig': grpc.unary_unary_rpc_method_handler(
+            servicer.DutHugepageConfig,
+            request_deserializer=HugepConf.FromString,
+            response_serializer=StatusReply.SerializeToString,
+        ),
+        'CheckDependecies': grpc.unary_unary_rpc_method_handler(
+            servicer.CheckDependecies,
+            request_deserializer=HostInfo.FromString,
+            response_serializer=StatusReply.SerializeToString,
+        ),
         'UploadConfigFile': grpc.unary_unary_rpc_method_handler(
             servicer.UploadConfigFile,
             request_deserializer=ConfFile.FromString,
@@ -819,11 +943,6 @@ try:
         'TestStatus': grpc.unary_unary_rpc_method_handler(
             servicer.TestStatus,
             request_deserializer=StatusQuery.FromString,
-            response_serializer=StatusReply.SerializeToString,
-        ),
-        'TGenHostConnect': grpc.unary_unary_rpc_method_handler(
-            servicer.TGenHostConnect,
-            request_deserializer=HostInfo.FromString,
             response_serializer=StatusReply.SerializeToString,
         ),
         'StartTGen': grpc.unary_unary_rpc_method_handler(
@@ -924,6 +1043,38 @@ try:
       # missing associated documentation comment in .proto file
       pass
       context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
+    def VsperfInstall(self, request, context):
+      # missing associated documentation comment in .proto file
+      pass
+      context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
+    def TGenHostConnect(self, request, context):
+      # missing associated documentation comment in .proto file
+      pass
+      context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
+    def TGenInstall(self, request, context):
+      # missing associated documentation comment in .proto file
+      pass
+      context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
+    def TGenUploadConfigFile(self, request, context):
+      # missing associated documentation comment in .proto file
+      pass
+      context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
+    def CollectdInstall(self, request, context):
+      # missing associated documentation comment in .proto file
+      pass
+      context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
+    def CollectdUploadConfig(self, request, context):
+      # missing associated documentation comment in .proto file
+      pass
+      context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
+    def DutHugepageConfig(self, request, context):
+      # missing associated documentation comment in .proto file
+      pass
+      context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
+    def CheckDependecies(self, request, context):
+      # missing associated documentation comment in .proto file
+      pass
+      context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
     def UploadConfigFile(self, request, context):
       # missing associated documentation comment in .proto file
       pass
@@ -933,10 +1084,6 @@ try:
       pass
       context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
     def TestStatus(self, request, context):
-      # missing associated documentation comment in .proto file
-      pass
-      context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
-    def TGenHostConnect(self, request, context):
       # missing associated documentation comment in .proto file
       pass
       context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
@@ -1019,6 +1166,46 @@ try:
       pass
       raise NotImplementedError()
     HostConnect.future = None
+    def VsperfInstall(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
+      # missing associated documentation comment in .proto file
+      pass
+      raise NotImplementedError()
+    VsperfInstall.future = None
+    def TGenHostConnect(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
+      # missing associated documentation comment in .proto file
+      pass
+      raise NotImplementedError()
+    TGenHostConnect.future = None
+    def TGenInstall(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
+      # missing associated documentation comment in .proto file
+      pass
+      raise NotImplementedError()
+    TGenInstall.future = None
+    def TGenUploadConfigFile(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
+      # missing associated documentation comment in .proto file
+      pass
+      raise NotImplementedError()
+    TGenUploadConfigFile.future = None
+    def CollectdInstall(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
+      # missing associated documentation comment in .proto file
+      pass
+      raise NotImplementedError()
+    CollectdInstall.future = None
+    def CollectdUploadConfig(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
+      # missing associated documentation comment in .proto file
+      pass
+      raise NotImplementedError()
+    CollectdUploadConfig.future = None
+    def DutHugepageConfig(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
+      # missing associated documentation comment in .proto file
+      pass
+      raise NotImplementedError()
+    DutHugepageConfig.future = None
+    def CheckDependecies(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
+      # missing associated documentation comment in .proto file
+      pass
+      raise NotImplementedError()
+    CheckDependecies.future = None
     def UploadConfigFile(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
       # missing associated documentation comment in .proto file
       pass
@@ -1034,11 +1221,6 @@ try:
       pass
       raise NotImplementedError()
     TestStatus.future = None
-    def TGenHostConnect(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
-      # missing associated documentation comment in .proto file
-      pass
-      raise NotImplementedError()
-    TGenHostConnect.future = None
     def StartTGen(self, request, timeout, metadata=None, with_call=False, protocol_options=None):
       # missing associated documentation comment in .proto file
       pass
@@ -1128,7 +1310,11 @@ try:
     file not marked beta) for all further purposes. This function was
     generated only to ease transition from grpcio<0.15.0 to grpcio>=0.15.0"""
     request_deserializers = {
+      ('vsperf.Controller', 'CheckDependecies'): HostInfo.FromString,
+      ('vsperf.Controller', 'CollectdInstall'): HostInfo.FromString,
+      ('vsperf.Controller', 'CollectdUploadConfig'): ConfFile.FromString,
       ('vsperf.Controller', 'DUTvsperfTestAvailability'): HostInfo.FromString,
+      ('vsperf.Controller', 'DutHugepageConfig'): HugepConf.FromString,
       ('vsperf.Controller', 'GetVSPERFConffromDUT'): HostInfo.FromString,
       ('vsperf.Controller', 'HostConnect'): HostInfo.FromString,
       ('vsperf.Controller', 'RemoveCollectd'): HostInfo.FromString,
@@ -1146,12 +1332,19 @@ try:
       ('vsperf.Controller', 'StartTGen'): ControlTGen.FromString,
       ('vsperf.Controller', 'StartTest'): ControlVsperf.FromString,
       ('vsperf.Controller', 'TGenHostConnect'): HostInfo.FromString,
+      ('vsperf.Controller', 'TGenInstall'): HostVerInfo.FromString,
+      ('vsperf.Controller', 'TGenUploadConfigFile'): ConfFile.FromString,
       ('vsperf.Controller', 'TerminateVsperf'): HostInfo.FromString,
       ('vsperf.Controller', 'TestStatus'): StatusQuery.FromString,
       ('vsperf.Controller', 'UploadConfigFile'): ConfFile.FromString,
+      ('vsperf.Controller', 'VsperfInstall'): HostInfo.FromString,
     }
     response_serializers = {
+      ('vsperf.Controller', 'CheckDependecies'): StatusReply.SerializeToString,
+      ('vsperf.Controller', 'CollectdInstall'): StatusReply.SerializeToString,
+      ('vsperf.Controller', 'CollectdUploadConfig'): UploadStatus.SerializeToString,
       ('vsperf.Controller', 'DUTvsperfTestAvailability'): StatusReply.SerializeToString,
+      ('vsperf.Controller', 'DutHugepageConfig'): StatusReply.SerializeToString,
       ('vsperf.Controller', 'GetVSPERFConffromDUT'): StatusReply.SerializeToString,
       ('vsperf.Controller', 'HostConnect'): StatusReply.SerializeToString,
       ('vsperf.Controller', 'RemoveCollectd'): StatusReply.SerializeToString,
@@ -1169,12 +1362,19 @@ try:
       ('vsperf.Controller', 'StartTGen'): StatusReply.SerializeToString,
       ('vsperf.Controller', 'StartTest'): StatusReply.SerializeToString,
       ('vsperf.Controller', 'TGenHostConnect'): StatusReply.SerializeToString,
+      ('vsperf.Controller', 'TGenInstall'): StatusReply.SerializeToString,
+      ('vsperf.Controller', 'TGenUploadConfigFile'): UploadStatus.SerializeToString,
       ('vsperf.Controller', 'TerminateVsperf'): StatusReply.SerializeToString,
       ('vsperf.Controller', 'TestStatus'): StatusReply.SerializeToString,
       ('vsperf.Controller', 'UploadConfigFile'): UploadStatus.SerializeToString,
+      ('vsperf.Controller', 'VsperfInstall'): StatusReply.SerializeToString,
     }
     method_implementations = {
+      ('vsperf.Controller', 'CheckDependecies'): face_utilities.unary_unary_inline(servicer.CheckDependecies),
+      ('vsperf.Controller', 'CollectdInstall'): face_utilities.unary_unary_inline(servicer.CollectdInstall),
+      ('vsperf.Controller', 'CollectdUploadConfig'): face_utilities.unary_unary_inline(servicer.CollectdUploadConfig),
       ('vsperf.Controller', 'DUTvsperfTestAvailability'): face_utilities.unary_unary_inline(servicer.DUTvsperfTestAvailability),
+      ('vsperf.Controller', 'DutHugepageConfig'): face_utilities.unary_unary_inline(servicer.DutHugepageConfig),
       ('vsperf.Controller', 'GetVSPERFConffromDUT'): face_utilities.unary_unary_inline(servicer.GetVSPERFConffromDUT),
       ('vsperf.Controller', 'HostConnect'): face_utilities.unary_unary_inline(servicer.HostConnect),
       ('vsperf.Controller', 'RemoveCollectd'): face_utilities.unary_unary_inline(servicer.RemoveCollectd),
@@ -1192,9 +1392,12 @@ try:
       ('vsperf.Controller', 'StartTGen'): face_utilities.unary_unary_inline(servicer.StartTGen),
       ('vsperf.Controller', 'StartTest'): face_utilities.unary_unary_inline(servicer.StartTest),
       ('vsperf.Controller', 'TGenHostConnect'): face_utilities.unary_unary_inline(servicer.TGenHostConnect),
+      ('vsperf.Controller', 'TGenInstall'): face_utilities.unary_unary_inline(servicer.TGenInstall),
+      ('vsperf.Controller', 'TGenUploadConfigFile'): face_utilities.unary_unary_inline(servicer.TGenUploadConfigFile),
       ('vsperf.Controller', 'TerminateVsperf'): face_utilities.unary_unary_inline(servicer.TerminateVsperf),
       ('vsperf.Controller', 'TestStatus'): face_utilities.unary_unary_inline(servicer.TestStatus),
       ('vsperf.Controller', 'UploadConfigFile'): face_utilities.unary_unary_inline(servicer.UploadConfigFile),
+      ('vsperf.Controller', 'VsperfInstall'): face_utilities.unary_unary_inline(servicer.VsperfInstall),
     }
     server_options = beta_implementations.server_options(request_deserializers=request_deserializers, response_serializers=response_serializers, thread_pool=pool, thread_pool_size=pool_size, default_timeout=default_timeout, maximum_timeout=maximum_timeout)
     return beta_implementations.server(method_implementations, options=server_options)
@@ -1207,7 +1410,11 @@ try:
     file not marked beta) for all further purposes. This function was
     generated only to ease transition from grpcio<0.15.0 to grpcio>=0.15.0"""
     request_serializers = {
+      ('vsperf.Controller', 'CheckDependecies'): HostInfo.SerializeToString,
+      ('vsperf.Controller', 'CollectdInstall'): HostInfo.SerializeToString,
+      ('vsperf.Controller', 'CollectdUploadConfig'): ConfFile.SerializeToString,
       ('vsperf.Controller', 'DUTvsperfTestAvailability'): HostInfo.SerializeToString,
+      ('vsperf.Controller', 'DutHugepageConfig'): HugepConf.SerializeToString,
       ('vsperf.Controller', 'GetVSPERFConffromDUT'): HostInfo.SerializeToString,
       ('vsperf.Controller', 'HostConnect'): HostInfo.SerializeToString,
       ('vsperf.Controller', 'RemoveCollectd'): HostInfo.SerializeToString,
@@ -1225,12 +1432,19 @@ try:
       ('vsperf.Controller', 'StartTGen'): ControlTGen.SerializeToString,
       ('vsperf.Controller', 'StartTest'): ControlVsperf.SerializeToString,
       ('vsperf.Controller', 'TGenHostConnect'): HostInfo.SerializeToString,
+      ('vsperf.Controller', 'TGenInstall'): HostVerInfo.SerializeToString,
+      ('vsperf.Controller', 'TGenUploadConfigFile'): ConfFile.SerializeToString,
       ('vsperf.Controller', 'TerminateVsperf'): HostInfo.SerializeToString,
       ('vsperf.Controller', 'TestStatus'): StatusQuery.SerializeToString,
       ('vsperf.Controller', 'UploadConfigFile'): ConfFile.SerializeToString,
+      ('vsperf.Controller', 'VsperfInstall'): HostInfo.SerializeToString,
     }
     response_deserializers = {
+      ('vsperf.Controller', 'CheckDependecies'): StatusReply.FromString,
+      ('vsperf.Controller', 'CollectdInstall'): StatusReply.FromString,
+      ('vsperf.Controller', 'CollectdUploadConfig'): UploadStatus.FromString,
       ('vsperf.Controller', 'DUTvsperfTestAvailability'): StatusReply.FromString,
+      ('vsperf.Controller', 'DutHugepageConfig'): StatusReply.FromString,
       ('vsperf.Controller', 'GetVSPERFConffromDUT'): StatusReply.FromString,
       ('vsperf.Controller', 'HostConnect'): StatusReply.FromString,
       ('vsperf.Controller', 'RemoveCollectd'): StatusReply.FromString,
@@ -1248,12 +1462,19 @@ try:
       ('vsperf.Controller', 'StartTGen'): StatusReply.FromString,
       ('vsperf.Controller', 'StartTest'): StatusReply.FromString,
       ('vsperf.Controller', 'TGenHostConnect'): StatusReply.FromString,
+      ('vsperf.Controller', 'TGenInstall'): StatusReply.FromString,
+      ('vsperf.Controller', 'TGenUploadConfigFile'): UploadStatus.FromString,
       ('vsperf.Controller', 'TerminateVsperf'): StatusReply.FromString,
       ('vsperf.Controller', 'TestStatus'): StatusReply.FromString,
       ('vsperf.Controller', 'UploadConfigFile'): UploadStatus.FromString,
+      ('vsperf.Controller', 'VsperfInstall'): StatusReply.FromString,
     }
     cardinalities = {
+      'CheckDependecies': cardinality.Cardinality.UNARY_UNARY,
+      'CollectdInstall': cardinality.Cardinality.UNARY_UNARY,
+      'CollectdUploadConfig': cardinality.Cardinality.UNARY_UNARY,
       'DUTvsperfTestAvailability': cardinality.Cardinality.UNARY_UNARY,
+      'DutHugepageConfig': cardinality.Cardinality.UNARY_UNARY,
       'GetVSPERFConffromDUT': cardinality.Cardinality.UNARY_UNARY,
       'HostConnect': cardinality.Cardinality.UNARY_UNARY,
       'RemoveCollectd': cardinality.Cardinality.UNARY_UNARY,
@@ -1271,9 +1492,12 @@ try:
       'StartTGen': cardinality.Cardinality.UNARY_UNARY,
       'StartTest': cardinality.Cardinality.UNARY_UNARY,
       'TGenHostConnect': cardinality.Cardinality.UNARY_UNARY,
+      'TGenInstall': cardinality.Cardinality.UNARY_UNARY,
+      'TGenUploadConfigFile': cardinality.Cardinality.UNARY_UNARY,
       'TerminateVsperf': cardinality.Cardinality.UNARY_UNARY,
       'TestStatus': cardinality.Cardinality.UNARY_UNARY,
       'UploadConfigFile': cardinality.Cardinality.UNARY_UNARY,
+      'VsperfInstall': cardinality.Cardinality.UNARY_UNARY,
     }
     stub_options = beta_implementations.stub_options(host=host, metadata_transformer=metadata_transformer, request_serializers=request_serializers, response_deserializers=response_deserializers, thread_pool=pool, thread_pool_size=pool_size)
     return beta_implementations.dynamic_stub(channel, 'vsperf.Controller', cardinalities, options=stub_options)

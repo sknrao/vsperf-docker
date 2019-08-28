@@ -7,7 +7,7 @@ services:
     volumes:
       - ./controller/vsperf:/vsperf
     ports:
-      - 4000:4000
+      - 50052:50052
  
 
     

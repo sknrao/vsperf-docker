@@ -46,6 +46,7 @@ CLEAN_UP = os.getenv('CLEAN_UP')
 
 DUT_CLIENT = None
 TGEN_CLIENT = None
+SANITY_CHECK_DONE_LIST = list()
 
 
 def host_connect():
@@ -246,6 +247,7 @@ def sanit_collectd_check():
     """
     Check and verify collectd is able to run and start properly
     """
+    global SANITY_CHECK_DONE_LIST
     check_collectd_cmd = "find /opt -maxdepth 1 -name 'collectd'"
     check_test_result = str(DUT_CLIENT.execute(check_collectd_cmd)[1])
     if "collectd" in check_test_result:
@@ -256,6 +258,7 @@ def sanit_collectd_check():
         check_collectd_status = str(
             DUT_CLIENT.execute(check_collectd_status_cmd)[1])
         if "/sbin/collectd" in check_collectd_status:
+            SANITY_CHECK_DONE_LIST.append(int(1))
             print(
                 "Collectd is working Fine ................................................[OK] \n ")
         else:
@@ -271,6 +274,7 @@ def sanity_vnf_path():
     Check if VNF image available on the mention path in Test Config File
     """
     # fetch the VNF path we placed in vsperf.conf file
+    global SANITY_CHECK_DONE_LIST
     vsperf_conf_path = open('/usr/src/app/vsperf/vsperf.conf')
     vsperf_conf_read = vsperf_conf_path.readlines()
     for i in vsperf_conf_read:
@@ -280,6 +284,7 @@ def sanity_vnf_path():
             vnf_path_check_result = str(
                 DUT_CLIENT.execute(vnf_path_check_cmd)[1])
             if vnf_image_path in vnf_path_check_result:
+                SANITY_CHECK_DONE_LIST.append(int(2))
                 print(
                     "Test Configratuion file has Correct VNF path information on DUT-Host.." \
                     "...[OK]\n ")
@@ -292,6 +297,7 @@ def sanity_vsperf_check():
     """
     We have to make sure that VSPERF install correctly
     """
+    global SANITY_CHECK_DONE_LIST
     vsperf_check_command = "source ~/vsperfenv/bin/activate ; cd vswitchperf* && ./vsperf --help"
     vsperf_check_cmd_result = str(DUT_CLIENT.execute(vsperf_check_command)[1])
     vsperf_verify_list = [
@@ -305,6 +311,7 @@ def sanity_vsperf_check():
             if idx < 5:
                 continue
             elif idx == 5:
+                SANITY_CHECK_DONE_LIST.append(int(3))
                 print("VSPERF Installed Correctly and Working fine......................." \
                     ".......[OK]\n")
             else:
@@ -337,6 +344,7 @@ def cpumask2coreids(mask):
 
 def cpu_allocation_check():
     """It will check the cpu allocation before run test"""
+    global SANITY_CHECK_DONE_LIST
     read_setting_cmd = "source vsperfenv/bin/activate ; cd vswitchperf* && "
     read_setting_cmd += './vsperf --list-settings'
     default_vsperf_settings = ast.literal_eval(str(DUT_CLIENT.execute(read_setting_cmd)[1]))
@@ -350,6 +358,7 @@ def cpu_allocation_check():
         vswitch_vhost_cpu_map = [str(x) for x in  ast.literal_eval(vswitch_cpu_map)]
 
     if vswitch_pmd_cpu_mask == 0 and vswitch_vhost_cpu_map == 0:
+        SANITY_CHECK_DONE_LIST.append(int(4))
         print("CPU allocation Check Done,"\
             "\nNo vswitch_pmd_cpu_mask or vswitch_vhost_cpu_map assign in test config file\n" \
             "Using Default Settings ..................................................[OK]\n")
@@ -358,6 +367,7 @@ def cpu_allocation_check():
         print(core_id)
         if len(default_vswitch_vhost_cpu_map) >= len(core_id):
             if all(elem in default_vswitch_vhost_cpu_map  for elem in core_id):
+                SANITY_CHECK_DONE_LIST.append(int(4))
                 print("CPU allocation properly done on DUT-Host.................[OK]\n")
             else:
                 print("CPU allocation not done properly on DUT-Host............[Failed]\n")
@@ -368,6 +378,7 @@ def cpu_allocation_check():
         print(core_id_1)
         if len(vswitch_vhost_cpu_map) >= len(core_id_1):
             if all(elem in vswitch_vhost_cpu_map  for elem in core_id_1):
+                SANITY_CHECK_DONE_LIST.append(int(4))
                 print("CPU allocation properly done on DUT-Host.................[OK]\n")
             else:
                 print("CPU allocation not done properly on DUT-Host............[Failed]\n")
@@ -378,6 +389,7 @@ def cpu_allocation_check():
         print(core_id_2)
         if len(vswitch_vhost_cpu_map) >= len(core_id_2):
             if all(elem in vswitch_vhost_cpu_map  for elem in core_id_2):
+                SANITY_CHECK_DONE_LIST.append(int(4))
                 print("CPU allocation properly done on DUT-Host.................[OK]\n")
             else:
                 print("CPU allocation not done properly on DUT-Host............[Failed]\n")
@@ -390,9 +402,11 @@ def sanity_dut_conn_tgen_check():
     """
     We should confirm the DUT connectivity with the Tgen and Traffic Generator is working or not
     """
+    global SANITY_CHECK_DONE_LIST
     tgen_connectivity_check_cmd = "ping {} -c 1".format(TGEN_IP)
     tgen_connectivity_check_result = int(DUT_CLIENT.execute(tgen_connectivity_check_cmd)[0])
     if tgen_connectivity_check_result == 0:
+        SANITY_CHECK_DONE_LIST.append(int(5))
         print(
             "DUT-Host is successfully reachable to Traffic Generator Host.............[OK]\n")
     else:
@@ -410,8 +424,14 @@ sanit_collectd_check()
 sanity_vsperf_check()
 sanity_dut_conn_tgen_check()
 start_beats()
-run_vsperf_test()
-test_status()
+
+if len(SANITY_CHECK_DONE_LIST) != 5:
+    print("Certain Sanity Checks Failed\n" \
+          "You can make changes based on the outputs and run" \
+          "the testcontrol auto container again")
+else:
+    run_vsperf_test()
+    test_status()
 
 if "yes" in CLEAN_UP.lower():
     vsperf_remove()

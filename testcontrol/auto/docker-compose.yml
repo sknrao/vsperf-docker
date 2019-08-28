@@ -9,7 +9,7 @@ services:
     env_file:
       - ./controller/list.env
     ports:
-      - 4000
+      - 50052
  
 
     
