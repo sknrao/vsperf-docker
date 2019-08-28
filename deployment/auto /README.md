@@ -16,6 +16,6 @@ docker-compose build
 docker-compose run controller
 
 User can analyze the outputs of docker-compose run and manage the further configurations.
-Everything looks good for then user can run the testcontrol auto container and perform vsperf test.
+Everything looks good then user can run the testcontrol auto container and perform vsperf test.
 
 
