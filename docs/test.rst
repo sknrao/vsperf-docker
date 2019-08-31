@@ -1,3 +1,9 @@
+Before using VSPERF client and VSPERF containers user must run the prepare.sh script which will prepare their local environment.
+
+locate vsperf-docker/prepare.sh and run:
+bash prepare.sh
+
+
 VSPERF Client
 ---------------------------------------------------------------------------------------------
 

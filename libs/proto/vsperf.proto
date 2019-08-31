@@ -18,10 +18,17 @@ package vsperf;
 
 service Controller {
   rpc HostConnect (HostInfo) returns (StatusReply) {}
+  rpc VsperfInstall (HostInfo) returns (StatusReply) {}
+  rpc TGenHostConnect (HostInfo) returns (StatusReply) {}
+  rpc TGenInstall (HostVerInfo) returns (StatusReply) {}
+  rpc TGenUploadConfigFile (stream ConfFile) returns (UploadStatus) {}
+  rpc CollectdInstall (HostInfo) returns (StatusReply) {} 
+  rpc CollectdUploadConfig (stream ConfFile) returns (UploadStatus) {}
+  rpc DutHugepageConfig (HugepConf) returns (StatusReply) {}
+  rpc CheckDependecies (HostInfo) returns (StatusReply) {}
   rpc UploadConfigFile (ConfFile) returns (UploadStatus) {}
   rpc StartTest (ControlVsperf) returns (StatusReply) {}
   rpc TestStatus (StatusQuery) returns (StatusReply) {}
-  rpc TGenHostConnect (HostInfo) returns (StatusReply) {}
   rpc StartTGen (ControlTGen) returns (StatusReply) {}
   rpc StartBeats (HostInfo) returns (StatusReply) {}
   rpc RemoveVsperf (HostInfo) returns (StatusReply) {}
@@ -55,8 +62,7 @@ message LogDir {
 }
 
 message ConfFile {
-  string Content = 1;
-  string Filename = 2;
+  bytes Content = 1;
 }
 
 message HostInfo {
@@ -95,3 +101,4 @@ message UploadStatus {
     string Message = 1;
     UploadStatusCode Code = 2;
 }
+
