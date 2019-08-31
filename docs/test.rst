@@ -61,7 +61,7 @@ VSPERF Containers
 ============
 deployment
 ============
-User have two choices for deployment auto and interactive.
+User have two choices for deployment, auto and interactive.
 
 1. auto
 ^^^^^^^^^^^^^^^^^^^^^
@@ -107,7 +107,7 @@ Once the server is running user have to run testcontrol interactive container an
 ===============
 testcontrol
 ===============
-For testcontrol also user have two choices auto and interactive.
+For testcontrol also user have two choices , auto and interactive.
 
 1. auto
 ^^^^^^^^^^^^^^^^^^^^^
