@@ -1,7 +1,7 @@
 version: '2'
 
 services:
-  deployinter:
+  deploy:
     build:
       context: ./controller
     volumes:

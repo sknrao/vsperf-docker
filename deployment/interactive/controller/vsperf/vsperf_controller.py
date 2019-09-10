@@ -174,11 +174,11 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
             return vsperf_pb2.StatusReply(message="TGen-Host is not Connected [!]" \
                                                    "\nMake sure to establish connection with" \
                                                    " TGen-Host.")
-        kill_cmd = "pkill -f ./t-rex"
+        kill_cmd = "pkill -f t-rex"
         self.tgen_client.send_command(kill_cmd)
         tgen_start_cmd = "cd trex_2.37/scripts && ./t-rex-64 -f cap2/dns.yaml -d 100 -m 1 --nc"
         tgen_start_cmd_result = int(self.tgen_client.execute(tgen_start_cmd)[0])
-        kill_cmd = "pkill -f ./t-rex"
+        kill_cmd = "pkill -f t-rex"
         self.tgen_client.send_command(kill_cmd)
         if tgen_start_cmd_result == 0:
             return vsperf_pb2.StatusReply(

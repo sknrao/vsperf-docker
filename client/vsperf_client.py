@@ -54,15 +54,15 @@ class VsperfClient():
         self.dut_check = 0
         self.tgen_check = 0
 
-    def get_dut_channel_info(self):
+    def get_deploy_channel_info(self):
         """get the channel data"""
-        return (self.config.get('DutServer', 'ip'),
-                self.config.get('DutServer', 'port'))
+        return (self.config.get('DeployServer', 'ip'),
+                self.config.get('DeployServer', 'port'))
 
-    def get_tgen_channel_info(self):
+    def get_test_channel_info(self):
         """get the channel for tgen"""
-        return (self.config.get('TgenServer', 'ip'),
-                self.config.get('TgenServer', 'port'))
+        return (self.config.get('TestServer', 'ip'),
+                self.config.get('TestServer', 'port'))
 
     def create_stub(self, channel):
         """create stub to talk to controller"""
@@ -75,6 +75,8 @@ class VsperfClient():
                                        uname=self.config.get('Host', 'uname'),
                                        pwd=self.config.get('Host', 'pwd'))
         connect_reply = self.stub.HostConnect(hostinfo)
+        client = VsperfClient()
+        client.automatically_test_dut_connect()
         DUT_CHECK = 1
         print(connect_reply.message)
 
@@ -86,7 +88,27 @@ class VsperfClient():
                                        pwd=self.config.get('TGen', 'pwd'))
         connect_reply = self.stub.TGenHostConnect(tgeninfo)
         TGEN_CHECK = 1
+        client = VsperfClient()
+        client.automatically_test_tgen_connect()
         print(connect_reply.message)
+
+    @classmethod
+    def automatically_test_dut_connect(cls):
+        """handle automatic connection with tgen"""
+        client = VsperfClient()
+        ip_add, port = client.get_test_channel_info()
+        channel = grpc.insecure_channel(ip_add + ':' + port)
+        client.create_stub(channel)
+        client.host_testcontrol_connect()
+
+    @classmethod
+    def automatically_test_tgen_connect(cls):
+        """handle automatic connection with tgen"""
+        client = VsperfClient()
+        ip_add, port = client.get_test_channel_info()
+        channel = grpc.insecure_channel(ip_add + ':' + port)
+        client.create_stub(channel)
+        client.tgen_testcontrol_connect()
 
     def exit_section(self):
         """exit"""
@@ -432,16 +454,6 @@ class VsperfClient():
                                        pwd=self.config.get('TGen', 'pwd'))
         self.stub.TGenHostConnect(tgeninfo)
 
-    @classmethod
-    def automatically_connect(cls):
-        """handle automatic connection with tgen"""
-        client = VsperfClient()
-        ip_add, port = client.get_tgen_channel_info()
-        channel = grpc.insecure_channel(ip_add + ':' + port)
-        client.create_stub(channel)
-        client.host_testcontrol_connect()
-        client.tgen_testcontrol_connect()
-
     def upload_collectd_config(self):
         """collectd config file chunks forwarded to controller"""
         if DUT_CHECK == 0:
@@ -489,8 +501,7 @@ class VsperfClient():
         This Function use to establish connection for vsperf
         """
         client = VsperfClient()
-        client.automatically_connect()
-        ip_add, port = client.get_dut_channel_info()
+        ip_add, port = client.get_deploy_channel_info()
         print("Establish connection for vsperf")
         menuitems_connection = [
             {"Connect to DUT Host": client.host_connect},
@@ -502,7 +513,7 @@ class VsperfClient():
     def vsperf_setup(cls):
         """setup sub-options"""
         client = VsperfClient()
-        ip_add, port = client.get_dut_channel_info()
+        ip_add, port = client.get_deploy_channel_info()
         print("Prerequisites Installation for VSPERF")
         menuitems_setup = [
             {"Install VSPERF": client.vsperf_install},
@@ -515,7 +526,7 @@ class VsperfClient():
     def upload_config_files(cls):
         """all the upload sub-options"""
         client = VsperfClient()
-        ip_add, port = client.get_dut_channel_info()
+        ip_add, port = client.get_deploy_channel_info()
         menuitems_setup = [
             {"Upload TGen Configuration File": client.upload_tgen_config},
             {"Upload Collectd Configuration File": client.upload_collectd_config},
@@ -526,7 +537,7 @@ class VsperfClient():
     def manage_sysparam_config(cls):
         """manage system parameter on dut host before run test"""
         client = VsperfClient()
-        ip_add, port = client.get_dut_channel_info()
+        ip_add, port = client.get_deploy_channel_info()
         menuitems_setup = [
             {"DUT-Host hugepages configuration": client.dut_hugepage_config},
             {"Check VSPERF Dependencies on DUT-Host": client.dut_check_dependecies},
@@ -538,7 +549,7 @@ class VsperfClient():
     def test_status_check(cls):
         """after running test , test status related sub-options"""
         client = VsperfClient()
-        ip_add, port = client.get_tgen_channel_info()
+        ip_add, port = client.get_test_channel_info()
         menuitems_setup = [
             {"Test status": client.test_status},
             {"Get Test Configuration file from DUT-host": client.get_test_conf_from_dut},
@@ -550,7 +561,7 @@ class VsperfClient():
     def sanity_check_options(cls):
         """all sanity check sub-options"""
         client = VsperfClient()
-        ip_add, port = client.get_tgen_channel_info()
+        ip_add, port = client.get_test_channel_info()
         menuitems_setup = [
             {"Check installed VSPERF": client.sanity_vsperf_check},
             {"Check Test Config's VNF path is available on DUT-Host": client.sanity_vnf_path},
@@ -568,11 +579,11 @@ class VsperfClient():
         """run test sub-options"""
         print("**Before user Run Tests we highly recommend user to perform Sanity Checks.......")
         client = VsperfClient()
-        ip_add, port = client.get_tgen_channel_info()
+        ip_add, port = client.get_test_channel_info()
         menuitems_setup = [
             {"Upload Test Configuration File": client.upload_config},
-            {"Perform Sanity Checks before Run Tests": client.sanity_check_options},
-            {"Check DUT-Host is available for Test": client.dut_test_availability},
+            {"Perform Sanity Checks before running tests": client.sanity_check_options},
+            {"Check if DUT-HOST is available": client.dut_test_availability},
             {"Start TGen ": client.start_tgen},
             {"Start Beats": client.start_beats},
             {"Start Test": client.start_test},
@@ -588,7 +599,7 @@ class VsperfClient():
              IF you are performing Test on IntelPOD 12 - Node 4, Be careful during removal\n\n\
              *******************************************************************")
         client = VsperfClient()
-        ip_add, port = client.get_tgen_channel_info()
+        ip_add, port = client.get_test_channel_info()
         menuitems_setup = [
             {"Remove VSPERF": client.remove_vsperf},
             {"Terminate VSPERF": client.vsperf_terminate},
@@ -606,9 +617,9 @@ def run():
     client = VsperfClient()
     menuitems = [
         {"Establish Connections": client.establish_connection},
-        {"VSPERF Prerequisites Installation": client.vsperf_setup},
+        {"Installation": client.vsperf_setup},
         {"Upload Configuration Files": client.upload_config_files},
-        {"Manage System Configuration": client.manage_sysparam_config},
+        {"Manage DUT-System Configuration": client.manage_sysparam_config},
         {"Run Test": client.run_test},
         {"Test Status": client.test_status_check},
         {"Clean-Up": client.clean_up},

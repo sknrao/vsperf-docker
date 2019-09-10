@@ -26,7 +26,7 @@ service Controller {
   rpc CollectdUploadConfig (stream ConfFile) returns (UploadStatus) {}
   rpc DutHugepageConfig (HugepConf) returns (StatusReply) {}
   rpc CheckDependecies (HostInfo) returns (StatusReply) {}
-  rpc UploadConfigFile (ConfFile) returns (UploadStatus) {}
+  rpc UploadConfigFile (ConfFileTest) returns (UploadStatus) {}
   rpc StartTest (ControlVsperf) returns (StatusReply) {}
   rpc TestStatus (StatusQuery) returns (StatusReply) {}
   rpc StartTGen (ControlTGen) returns (StatusReply) {}
@@ -63,6 +63,11 @@ message LogDir {
 
 message ConfFile {
   bytes Content = 1;
+}
+
+message ConfFileTest {
+  string Content = 1;
+  string Filename = 2;
 }
 
 message HostInfo {

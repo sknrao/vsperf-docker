@@ -61,7 +61,7 @@ class ControllerStub(object):
         )
     self.UploadConfigFile = channel.unary_unary(
         '/vsperf.Controller/UploadConfigFile',
-        request_serializer=vsperf__pb2.ConfFile.SerializeToString,
+        request_serializer=vsperf__pb2.ConfFileTest.SerializeToString,
         response_deserializer=vsperf__pb2.UploadStatus.FromString,
         )
     self.StartTest = channel.unary_unary(
@@ -406,7 +406,7 @@ def add_ControllerServicer_to_server(servicer, server):
       ),
       'UploadConfigFile': grpc.unary_unary_rpc_method_handler(
           servicer.UploadConfigFile,
-          request_deserializer=vsperf__pb2.ConfFile.FromString,
+          request_deserializer=vsperf__pb2.ConfFileTest.FromString,
           response_serializer=vsperf__pb2.UploadStatus.SerializeToString,
       ),
       'StartTest': grpc.unary_unary_rpc_method_handler(

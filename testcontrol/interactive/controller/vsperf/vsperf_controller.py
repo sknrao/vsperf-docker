@@ -79,6 +79,8 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         self.trex_conf = None
         self.trex_params = None
         self.conffile = None
+        self.tests_run_check = None
+        self.tgen_start_check = None
         # Default TGen is T-Rex
         self.trex_conffile = "trex_cfg.yml"
         self.collectd_conffile = "collectd.conf"
@@ -129,6 +131,8 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
             return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
                                                    "\nMake sure to establish connection with" \
                                                    " DUT-Host.")
+        if self.tests_run_check != 1:
+            return vsperf_pb2.StatusReply(message="No test have ran yet. [!]")
         testtype_list = request.testtype.split(",")
         test_success = []
         test_failed = []
@@ -235,9 +239,12 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         if self.test_upload_check == 0:
             return vsperf_pb2.StatusReply(message="Test File is not uploaded yet [!] " \
                          "\nUpload Test Configuration File.")
+        if self.tgen_start_check != 1:
+            return vsperf_pb2.StatusReply(message="Traffic Generator has not started yet [!]")
         self.vsperf_conf = request.conffile
         self.testtype = request.testtype
         testtype_list = self.testtype.split(",")
+        self.tests_run_check = 1
         for test in testtype_list:
             self.scenario = test
             self.run_test()
@@ -473,6 +480,7 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         run_cmd += "./t-rex-64 "
         run_cmd += self.trex_params
         self.tgen_client.send_command(run_cmd)
+        self.tgen_start_check = 1
         return vsperf_pb2.StatusReply(message="T-Rex Successfully running...")
 
     def SanityCollectdCheck(self, request, context):
@@ -660,7 +668,7 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         if vswitch_pmd_cpu_mask == 0 and vswitch_vhost_cpu_map == 0:
             self.sanity_check_done_list.append(int(4))
             return vsperf_pb2.StatusReply(message="CPU allocation Check Done,"\
-                "\nNo vswitch_pmd_cpu_mask or vswitch_vhost_cpu_map assign in test" \
+                "\nNo vswitch_pmd_cpu_mask or vswitch_vhost_cpu_map assign in test " \
                 "configuration file.\nUsing Default Settings..[OK]\n")
         if vswitch_pmd_cpu_mask != 0 and vswitch_vhost_cpu_map == 0:
             core_id = self.cpumask2coreids(vswitch_pmd_cpu_mask)
@@ -679,6 +687,9 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
             return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
                                                    "\nMake sure to establish connection with" \
                                                    " DUT-Host.")
+        if self.test_upload_check == 0:
+            return vsperf_pb2.StatusReply(message="Test File is not uploaded yet [!] " \
+                         "\nUpload Test Configuration File.")
         read_cmd = "cat ~/{}".format(self.conffile)
         read_cmd_output = str(self.client.execute(read_cmd)[1])
         return vsperf_pb2.StatusReply(message="{}".format(read_cmd_output))

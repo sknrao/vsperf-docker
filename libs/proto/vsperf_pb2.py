@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='vsperf.proto',
   package='vsperf',
   syntax='proto3',
-  serialized_pb=_b('\n\x0cvsperf.proto\x12\x06vsperf\"3\n\rControlVsperf\x12\x10\n\x08testtype\x18\x01 \x01(\t\x12\x10\n\x08\x63onffile\x18\x02 \x01(\t\"/\n\x0b\x43ontrolTGen\x12\x0e\n\x06params\x18\x01 \x01(\t\x12\x10\n\x08\x63onffile\x18\x02 \x01(\t\"\x1b\n\x06LogDir\x12\x11\n\tdirectory\x18\x01 \x01(\t\"\x1b\n\x08\x43onfFile\x12\x0f\n\x07\x43ontent\x18\x01 \x01(\x0c\"2\n\x08HostInfo\x12\n\n\x02ip\x18\x01 \x01(\t\x12\r\n\x05uname\x18\x02 \x01(\t\x12\x0b\n\x03pwd\x18\x03 \x01(\t\"/\n\tHugepConf\x12\r\n\x05hpmax\x18\x01 \x01(\t\x12\x13\n\x0bhprequested\x18\x02 \x01(\t\"F\n\x0bHostVerInfo\x12\n\n\x02ip\x18\x01 \x01(\t\x12\r\n\x05uname\x18\x02 \x01(\t\x12\x0b\n\x03pwd\x18\x03 \x01(\t\x12\x0f\n\x07version\x18\x04 \x01(\t\"\x1f\n\x0bStatusQuery\x12\x10\n\x08testtype\x18\x01 \x01(\t\"\x1e\n\x0bStatusReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"G\n\x0cUploadStatus\x12\x0f\n\x07Message\x18\x01 \x01(\t\x12&\n\x04\x43ode\x18\x02 \x01(\x0e\x32\x18.vsperf.UploadStatusCode*3\n\x10UploadStatusCode\x12\x0b\n\x07Unknown\x10\x00\x12\x06\n\x02Ok\x10\x01\x12\n\n\x06\x46\x61iled\x10\x02\x32\xc7\r\n\nController\x12\x36\n\x0bHostConnect\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x38\n\rVsperfInstall\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12:\n\x0fTGenHostConnect\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x39\n\x0bTGenInstall\x12\x13.vsperf.HostVerInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x42\n\x14TGenUploadConfigFile\x12\x10.vsperf.ConfFile\x1a\x14.vsperf.UploadStatus\"\x00(\x01\x12:\n\x0f\x43ollectdInstall\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x42\n\x14\x43ollectdUploadConfig\x12\x10.vsperf.ConfFile\x1a\x14.vsperf.UploadStatus\"\x00(\x01\x12=\n\x11\x44utHugepageConfig\x12\x11.vsperf.HugepConf\x1a\x13.vsperf.StatusReply\"\x00\x12;\n\x10\x43heckDependecies\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12<\n\x10UploadConfigFile\x12\x10.vsperf.ConfFile\x1a\x14.vsperf.UploadStatus\"\x00\x12\x39\n\tStartTest\x12\x15.vsperf.ControlVsperf\x1a\x13.vsperf.StatusReply\"\x00\x12\x38\n\nTestStatus\x12\x13.vsperf.StatusQuery\x1a\x13.vsperf.StatusReply\"\x00\x12\x37\n\tStartTGen\x12\x13.vsperf.ControlTGen\x1a\x13.vsperf.StatusReply\"\x00\x12\x35\n\nStartBeats\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x37\n\x0cRemoveVsperf\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12=\n\x12RemoveResultFolder\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12?\n\x14RemoveUploadedConfig\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x39\n\x0eRemoveCollectd\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12;\n\x10RemoveEverything\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12:\n\x0fTerminateVsperf\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x39\n\x0eSanityNICCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12>\n\x13SanityCollectdCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x38\n\rSanityVNFpath\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12<\n\x11SanityVSPERFCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x41\n\x16SanityTgenConnDUTCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x43\n\x18SanityCPUAllocationCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x44\n\x19\x44UTvsperfTestAvailability\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12?\n\x14GetVSPERFConffromDUT\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x0cvsperf.proto\x12\x06vsperf\"3\n\rControlVsperf\x12\x10\n\x08testtype\x18\x01 \x01(\t\x12\x10\n\x08\x63onffile\x18\x02 \x01(\t\"/\n\x0b\x43ontrolTGen\x12\x0e\n\x06params\x18\x01 \x01(\t\x12\x10\n\x08\x63onffile\x18\x02 \x01(\t\"\x1b\n\x06LogDir\x12\x11\n\tdirectory\x18\x01 \x01(\t\"\x1b\n\x08\x43onfFile\x12\x0f\n\x07\x43ontent\x18\x01 \x01(\x0c\"1\n\x0c\x43onfFileTest\x12\x0f\n\x07\x43ontent\x18\x01 \x01(\t\x12\x10\n\x08\x46ilename\x18\x02 \x01(\t\"2\n\x08HostInfo\x12\n\n\x02ip\x18\x01 \x01(\t\x12\r\n\x05uname\x18\x02 \x01(\t\x12\x0b\n\x03pwd\x18\x03 \x01(\t\"/\n\tHugepConf\x12\r\n\x05hpmax\x18\x01 \x01(\t\x12\x13\n\x0bhprequested\x18\x02 \x01(\t\"F\n\x0bHostVerInfo\x12\n\n\x02ip\x18\x01 \x01(\t\x12\r\n\x05uname\x18\x02 \x01(\t\x12\x0b\n\x03pwd\x18\x03 \x01(\t\x12\x0f\n\x07version\x18\x04 \x01(\t\"\x1f\n\x0bStatusQuery\x12\x10\n\x08testtype\x18\x01 \x01(\t\"\x1e\n\x0bStatusReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"G\n\x0cUploadStatus\x12\x0f\n\x07Message\x18\x01 \x01(\t\x12&\n\x04\x43ode\x18\x02 \x01(\x0e\x32\x18.vsperf.UploadStatusCode*3\n\x10UploadStatusCode\x12\x0b\n\x07Unknown\x10\x00\x12\x06\n\x02Ok\x10\x01\x12\n\n\x06\x46\x61iled\x10\x02\x32\xcb\r\n\nController\x12\x36\n\x0bHostConnect\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x38\n\rVsperfInstall\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12:\n\x0fTGenHostConnect\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x39\n\x0bTGenInstall\x12\x13.vsperf.HostVerInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x42\n\x14TGenUploadConfigFile\x12\x10.vsperf.ConfFile\x1a\x14.vsperf.UploadStatus\"\x00(\x01\x12:\n\x0f\x43ollectdInstall\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x42\n\x14\x43ollectdUploadConfig\x12\x10.vsperf.ConfFile\x1a\x14.vsperf.UploadStatus\"\x00(\x01\x12=\n\x11\x44utHugepageConfig\x12\x11.vsperf.HugepConf\x1a\x13.vsperf.StatusReply\"\x00\x12;\n\x10\x43heckDependecies\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12@\n\x10UploadConfigFile\x12\x14.vsperf.ConfFileTest\x1a\x14.vsperf.UploadStatus\"\x00\x12\x39\n\tStartTest\x12\x15.vsperf.ControlVsperf\x1a\x13.vsperf.StatusReply\"\x00\x12\x38\n\nTestStatus\x12\x13.vsperf.StatusQuery\x1a\x13.vsperf.StatusReply\"\x00\x12\x37\n\tStartTGen\x12\x13.vsperf.ControlTGen\x1a\x13.vsperf.StatusReply\"\x00\x12\x35\n\nStartBeats\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x37\n\x0cRemoveVsperf\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12=\n\x12RemoveResultFolder\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12?\n\x14RemoveUploadedConfig\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x39\n\x0eRemoveCollectd\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12;\n\x10RemoveEverything\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12:\n\x0fTerminateVsperf\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x39\n\x0eSanityNICCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12>\n\x13SanityCollectdCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x38\n\rSanityVNFpath\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12<\n\x11SanityVSPERFCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x41\n\x16SanityTgenConnDUTCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x43\n\x18SanityCPUAllocationCheck\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12\x44\n\x19\x44UTvsperfTestAvailability\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x12?\n\x14GetVSPERFConffromDUT\x12\x10.vsperf.HostInfo\x1a\x13.vsperf.StatusReply\"\x00\x62\x06proto3')
 )
 
 _UPLOADSTATUSCODE = _descriptor.EnumDescriptor(
@@ -44,8 +44,8 @@ _UPLOADSTATUSCODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=495,
-  serialized_end=546,
+  serialized_start=546,
+  serialized_end=597,
 )
 _sym_db.RegisterEnumDescriptor(_UPLOADSTATUSCODE)
 
@@ -194,6 +194,44 @@ _CONFFILE = _descriptor.Descriptor(
 )
 
 
+_CONFFILETEST = _descriptor.Descriptor(
+  name='ConfFileTest',
+  full_name='vsperf.ConfFileTest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='Content', full_name='vsperf.ConfFileTest.Content', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Filename', full_name='vsperf.ConfFileTest.Filename', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=184,
+  serialized_end=233,
+)
+
+
 _HOSTINFO = _descriptor.Descriptor(
   name='HostInfo',
   full_name='vsperf.HostInfo',
@@ -234,8 +272,8 @@ _HOSTINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=184,
-  serialized_end=234,
+  serialized_start=235,
+  serialized_end=285,
 )
 
 
@@ -272,8 +310,8 @@ _HUGEPCONF = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=236,
-  serialized_end=283,
+  serialized_start=287,
+  serialized_end=334,
 )
 
 
@@ -324,8 +362,8 @@ _HOSTVERINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=285,
-  serialized_end=355,
+  serialized_start=336,
+  serialized_end=406,
 )
 
 
@@ -355,8 +393,8 @@ _STATUSQUERY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=357,
-  serialized_end=388,
+  serialized_start=408,
+  serialized_end=439,
 )
 
 
@@ -386,8 +424,8 @@ _STATUSREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=390,
-  serialized_end=420,
+  serialized_start=441,
+  serialized_end=471,
 )
 
 
@@ -424,8 +462,8 @@ _UPLOADSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=422,
-  serialized_end=493,
+  serialized_start=473,
+  serialized_end=544,
 )
 
 _UPLOADSTATUS.fields_by_name['Code'].enum_type = _UPLOADSTATUSCODE
@@ -433,6 +471,7 @@ DESCRIPTOR.message_types_by_name['ControlVsperf'] = _CONTROLVSPERF
 DESCRIPTOR.message_types_by_name['ControlTGen'] = _CONTROLTGEN
 DESCRIPTOR.message_types_by_name['LogDir'] = _LOGDIR
 DESCRIPTOR.message_types_by_name['ConfFile'] = _CONFFILE
+DESCRIPTOR.message_types_by_name['ConfFileTest'] = _CONFFILETEST
 DESCRIPTOR.message_types_by_name['HostInfo'] = _HOSTINFO
 DESCRIPTOR.message_types_by_name['HugepConf'] = _HUGEPCONF
 DESCRIPTOR.message_types_by_name['HostVerInfo'] = _HOSTVERINFO
@@ -469,6 +508,13 @@ ConfFile = _reflection.GeneratedProtocolMessageType('ConfFile', (_message.Messag
   # @@protoc_insertion_point(class_scope:vsperf.ConfFile)
   ))
 _sym_db.RegisterMessage(ConfFile)
+
+ConfFileTest = _reflection.GeneratedProtocolMessageType('ConfFileTest', (_message.Message,), dict(
+  DESCRIPTOR = _CONFFILETEST,
+  __module__ = 'vsperf_pb2'
+  # @@protoc_insertion_point(class_scope:vsperf.ConfFileTest)
+  ))
+_sym_db.RegisterMessage(ConfFileTest)
 
 HostInfo = _reflection.GeneratedProtocolMessageType('HostInfo', (_message.Message,), dict(
   DESCRIPTOR = _HOSTINFO,
@@ -580,7 +626,7 @@ try:
           )
       self.UploadConfigFile = channel.unary_unary(
           '/vsperf.Controller/UploadConfigFile',
-          request_serializer=ConfFile.SerializeToString,
+          request_serializer=ConfFileTest.SerializeToString,
           response_deserializer=UploadStatus.FromString,
           )
       self.StartTest = channel.unary_unary(
@@ -925,7 +971,7 @@ try:
         ),
         'UploadConfigFile': grpc.unary_unary_rpc_method_handler(
             servicer.UploadConfigFile,
-            request_deserializer=ConfFile.FromString,
+            request_deserializer=ConfFileTest.FromString,
             response_serializer=UploadStatus.SerializeToString,
         ),
         'StartTest': grpc.unary_unary_rpc_method_handler(
@@ -1329,7 +1375,7 @@ try:
       ('vsperf.Controller', 'TGenUploadConfigFile'): ConfFile.FromString,
       ('vsperf.Controller', 'TerminateVsperf'): HostInfo.FromString,
       ('vsperf.Controller', 'TestStatus'): StatusQuery.FromString,
-      ('vsperf.Controller', 'UploadConfigFile'): ConfFile.FromString,
+      ('vsperf.Controller', 'UploadConfigFile'): ConfFileTest.FromString,
       ('vsperf.Controller', 'VsperfInstall'): HostInfo.FromString,
     }
     response_serializers = {
@@ -1429,7 +1475,7 @@ try:
       ('vsperf.Controller', 'TGenUploadConfigFile'): ConfFile.SerializeToString,
       ('vsperf.Controller', 'TerminateVsperf'): HostInfo.SerializeToString,
       ('vsperf.Controller', 'TestStatus'): StatusQuery.SerializeToString,
-      ('vsperf.Controller', 'UploadConfigFile'): ConfFile.SerializeToString,
+      ('vsperf.Controller', 'UploadConfigFile'): ConfFileTest.SerializeToString,
       ('vsperf.Controller', 'VsperfInstall'): HostInfo.SerializeToString,
     }
     response_deserializers = {
