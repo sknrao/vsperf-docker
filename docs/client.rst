@@ -11,26 +11,44 @@ VSPERF client is used for both set-up of DUT-Host and TGen-Host as well as run t
 VSPERF client provides following options for User.
 
 * Establish Connections
-This option allow user to initialize the connections with DUT-Host and TGen-Host based on the credential provided in the vsperfclient.conf file.
+This option allow user to initialize the connections.             
+[0]Connect to DUT Host: It will establish connection with DUT-HOST.      
+[1]Connect to Tgen Host: This option will establish connection with TGen-Host.
 
-* VSPERF Prerequisites Installation
-After connection has established, user can perform installation of VSPERF and Collectd on DUT-Host, Traffic Generator(T-rex) on TGen-Host.
+* Installation
+After connection has established, user can perform installation for test environment setup.
+[0]Install VSPERF : This option will first check either vsperf is installed on DUT or not. If VSPERF is not installed, then it will perform VSPERF installation process on DUT-Host
+[1]Install TGen: This is option will check either t-rex is installed on Tgen or not. If t-rex is already installed then it will also check either is working fine or not. If there is not t-rex installed on Tgen then this option will install t-rex on Tgen-HOST
+[2]Install Collectd: This is option will install collectd on DUT-Host.
 
 * Upload Configuration Files
-Once set-up is done, User can upload Collectd configuration file on DUT-Host and T-Rex configuration file on TGen-Host.
+Once set-up is done, User can upload configuration files.
+[0]Upload TGen Configuration File: It will upload trex_cfg.yaml configuration file on Tgen.[User can either specify path in vsperfclient.conf or externally provide path for the trex_cfg.yaml]
+[1]Upload Collectd Configuration File: This is option is use to uplaod collectd configuration file.
 
-* Manage System Configuration
-User can manage hugepages of DUT-Host and Check VSPERF dependencies. User need to provide value for HpMax and HpRequested in vsperfclient.conf file.
+* Manage DUT-System Configuration
+[0]DUT-Host hugepages configuration: This option allow User to manage hugepages of DUT-Host. [User need to provide value for HpMax and HpRequested in vsperfclient.conf]
+[1]Check VSPERF dependencies: Using this option user can check library dependencies on DUT-Host.
 
 * Run Test
-After VSPERF Set-up is done, user can upload Vsperf test configuration file on DUT_Host. Further some, user must perform all sanity checks before running test. User does not able to start the Vsperf test until all sanity checks satisfied. This sanity check option contains following sub-options like to check VSPERF installed correctly, check Test Config's VNF path is available  on DUT-Host, check NIC PCIs is available on Traffic Generator, check installed Collectd, connection between DUT-Host and Traffic Generator Host, check CPU-allocation on DUT-host.User can check if DUT-Host is available for Test or not. If DUT-Host available for performing Vsperf test then user can start T-rex, start beats and start test.
+[0]Upload Test Configuration File : This option will upload the vsperf test configuration file.
+[1]Perform Sanity Checks before running tests : This option has certain sub-options , user must perform all sanity checks before running test. User does not able to start the Vsperf test until all sanity checks satisfied. This sanity check option contains following sub-options like to check VSPERF installed correctly, check Test Config's VNF path is available on DUT-Host, check NIC PCIs is available on Traffic Generator, check installed Collectd, connection between DUT-Host and Traffic Generator Host, check CPU-allocation on DUT-host.
+[2]Check if DUT-HOST is available : User can check if DUT-Host is available for Test or not. If DUT-Host available for performing Vsperf user can go ahead and start performing test.
+[3]Start TGen : This option will start t-rex traffic generator for test.
+[4]Start Beats : This option will start beats on DUT-Host
+[5]Start Test : If all the sanity check have performed and traffic generator is running then and then this option will start the vsperf test. Whatever test is defined in vsperfclient.conf will perform using this option. User can also perform multiple tests.
 
 * Test Status
-After running test user can check whether their test completed successfully or failed. If user is running multiple test then they can identify the failed test name using this option.
-User can also able to read the vsperf.conf file content they uploaded.
+[0]Test status : Using this option, After running test user can check whether their test completed successfully or failed. If user is running multiple test then they can identify the failed test name using this option.
+[1]Get Test Configuration file from DUT-host: User can also able to read the test configuration file content they uploaded.
 
 * Clean-Up
-Once user completed test, VSPERF client provide option to remove everything from DUT-host or any specific content related with VSPERF.
+[0]Remove VSPERF: This option will completely remove the vsperfenv on DUT-Host
+[1]Terminate VSPERF: This option will keep vsperfenv on DUT-Host. If there is any process still running related with the vsperf then this option will terminate all those processes like ovs-vswitchd,ovsdb-server,vppctl,stress,qemu-system-x86_64.
+[2]Remove Results from DUT-Host : This is option will remove all the test results located in /tmp folder.
+[3]Remove Uploaded Configuration Files: This option will remove all uploaded test configuration file
+[4]Remove Collectd: This option will uninstall collectd from the DUT-Host
+[5]Remove Everything: This option will execute all the options listed above.
 
 =============================
 How To Use
