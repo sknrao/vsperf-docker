@@ -318,15 +318,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
 
     def remove_uploaded_config(self):
         """
-        Remove all the uploaded configuration files
+        Remove all the uploaded test configuration file
         """
-        vconfig_rm_cmd = "rm ~/vsperf.conf"
+        vconfig_rm_cmd = "rm ~/{}".format(self.conffile)
         self.client.run(vconfig_rm_cmd)
-        tconfig_rm_cmd = "rm /etc/trex_cfg.yml"
-        self.tgen_client.run(tconfig_rm_cmd)
-        cdconfig_rm_cmd = "echo '{}' | sudo -S rm /opt/collectd/etc/collectd.conf".format(
-            self.pwd)
-        self.client.run(cdconfig_rm_cmd)
 
     def result_folder_remove(self):
         """
@@ -432,6 +427,9 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
             return vsperf_pb2.StatusReply(message="TGen-Host is not Connected [!]" \
                                                    "\nMake sure to establish connection with" \
                                                    " TGen-Host.")
+        if self.test_upload_check == 0:
+            return vsperf_pb2.StatusReply(message="Test File is not uploaded yet [!] " \
+                         "\nUpload Test Configuration File.")
         self.remove_uploaded_config()
         return vsperf_pb2.StatusReply(
             message="Successfully All Uploaded Config Files Removed")

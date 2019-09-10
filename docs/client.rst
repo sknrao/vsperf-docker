@@ -73,3 +73,4 @@ Run vsperf client
 Locate and run the vsperf_client.py with python3.
 
 [By default user does not require to make any changes in proto/vsperf.proto file to run the vsperf_client.py. However, if user want to add more APIs in current client they have to define them in proto/vsperf.proto file and use this command to make them usable for vsperf_client.py **python3 -m grpc_tools.protoc -I./ --python_out=. --grpc_python_out=. vsperf.proto**]
+
