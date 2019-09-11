@@ -47,7 +47,7 @@ Run **docker-compose build** command to build the container.
 
 Run
 ******************
-Run the container's service with **docker-compose up deployinter** command.
+Run the container's service with **docker-compose up deploy** command.
 
 Once the server is running user have to run testcontrol interactive container and then user can run the vsperf client.
 
@@ -88,6 +88,6 @@ Run **docker-compose build** command to build the container.
 
 Run
 ******************
-Run the container's service with **docker-compose up testcontrolinter** command.
+Run the container's service with **docker-compose up testcontrol** command.
 
 After running this container user can use the vsperf client.
