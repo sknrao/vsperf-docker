@@ -604,7 +604,7 @@ class VsperfClient():
             {"Remove VSPERF": client.remove_vsperf},
             {"Terminate VSPERF": client.vsperf_terminate},
             {"Remove Results from DUT-Host": client.remove_result_folder},
-            {"Remove Uploaded Configuration Files": client.remove_config_files},
+            {"Remove Uploaded Configuration File": client.remove_config_files},
             {"Remove Collectd": client.remove_collectd},
             {"Remove Everything": client.remove_everything},
             {"Return to Previous Menu": client.exit_section}

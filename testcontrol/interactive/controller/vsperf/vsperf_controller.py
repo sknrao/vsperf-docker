@@ -311,24 +311,24 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         vsperf_rm_cmd = "echo '{}' | sudo -S rm -r ~/vswitchperf".format(
             self.pwd)
-        self.client.run(vsperf_rm_cmd)
+        self.client.run(vsperf_rm_cmd, pty=True)
         vsperfenv_rm_cmd = "echo '{}' | sudo -S rm -r -f ~/vsperfenv".format(
             self.pwd)
-        self.client.run(vsperfenv_rm_cmd)
+        self.client.run(vsperfenv_rm_cmd, pty=True)
 
     def remove_uploaded_config(self):
         """
         Remove all the uploaded test configuration file
         """
         vconfig_rm_cmd = "rm ~/{}".format(self.conffile)
-        self.client.run(vconfig_rm_cmd)
+        self.client.run(vconfig_rm_cmd, pty=True)
 
     def result_folder_remove(self):
         """
         Remove result folder on DUT
         """
         remove_cmd = "rm -r /tmp/*results*"
-        self.client.run(remove_cmd)
+        self.client.run(remove_cmd, pty=True)
 
     def collectd_remove(self):
         """
@@ -336,10 +336,10 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
         """
         collectd_dwn_rm_cmd = "echo '{}' | sudo -S rm -r -f ~/collectd".format(
             self.pwd)
-        self.client.run(collectd_dwn_rm_cmd)
+        self.client.run(collectd_dwn_rm_cmd, pty=True)
         collectd_rm_cmd = "echo '{}' | sudo -S rm -r -f /opt/collectd".format(
             self.pwd)
-        self.client.run(collectd_rm_cmd)
+        self.client.run(collectd_rm_cmd, pty=True)
 
     def RemoveVsperf(self, request, context):
         """
@@ -360,15 +360,12 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
             return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
                                                    "\nMake sure to establish connection with" \
                                                    " DUT-Host.")
-        stress_kill_cmd = "echo '{}' | sudo -S pkill stress &> /dev/null".format(
-            self.pwd)
-        python3_kill_cmd = "echo '{}' | sudo -S pkill python3 &> /dev/null".format(
-            self.pwd)
-        qemu_kill_cmd = "echo '{}' | sudo -S killall -9 qemu-system-x86_64 &> /dev/null".format(
-            self.pwd)
-        self.client.run(stress_kill_cmd)
-        self.client.run(python3_kill_cmd)
-        self.client.run(qemu_kill_cmd)
+        stress_kill_cmd = "pkill stress"
+        python3_kill_cmd = "pkill python3"
+        qemu_kill_cmd = "killall -9 qemu-system-x86_64"
+        self.client.send_command(stress_kill_cmd)
+        self.client.send_command(python3_kill_cmd)
+        self.client.send_command(qemu_kill_cmd)
 
         # sometimes qemu resists to terminate, so wait a bit and kill it again
         qemu_check_cmd = "pgrep qemu-system-x86_64"
@@ -376,28 +373,24 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
 
         if qemu_cmd_response != '':
             time.sleep(5)
-            self.client.run(qemu_kill_cmd)
+            self.client.send_command(qemu_kill_cmds)
             time.sleep(5)
 
-        ovs_kill_cmd = "echo '{}' | sudo pkill ovs-vswitchd &> /dev/null".format(
-            self.pwd)
-        ovsdb_kill_cmd = "echo '{}' | sudo pkill ovsdb-server &> /dev/null".format(
-            self.pwd)
-        vppctl_kill_cmd = "echo '{}' | sudo pkill vppctl &> /dev/null".format(
-            self.pwd)
-        vpp_kill_cmd = "echo '{}' | sudo pkill vpp &> /dev/null".format(
-            self.pwd)
-        vpp_cmd = "echo '{}' | sudo pkill -9 vpp &> /dev/null".format(self.pwd)
+        ovs_kill_cmd = "pkill ovs-vswitchd"
+        ovsdb_kill_cmd = "pkill ovsdb-server"
+        vppctl_kill_cmd = "pkill vppctl"
+        vpp_kill_cmd = "pkill vpp"
+        vpp_cmd = "pkill -9".format(self.pwd)
 
-        self.client.run(ovs_kill_cmd)
+        self.client.send_command(ovs_kill_cmd)
         time.sleep(1)
-        self.client.run(ovsdb_kill_cmd)
+        self.client.send_command(ovsdb_kill_cmd)
         time.sleep(1)
-        self.client.run(vppctl_kill_cmd)
+        self.client.send_command(vppctl_kill_cmd)
         time.sleep(1)
-        self.client.run(vpp_kill_cmd)
+        self.client.send_command(vpp_kill_cmd)
         time.sleep(1)
-        self.client.run(vpp_cmd)
+        self.client.send_command(vpp_cmd)
         time.sleep(1)
 
         return vsperf_pb2.StatusReply(
