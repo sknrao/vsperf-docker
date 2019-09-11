@@ -11,7 +11,7 @@ docker-compose build
 
 2. Run the individual service which will start server for vsperf client.
 
-docker-compose up deployinter
+docker-compose up deploy
 
 
 
