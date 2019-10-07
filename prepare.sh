@@ -16,6 +16,7 @@ pip3 install grpcio==1.4.0 grpcio-tools==1.4.0 configparser
 
 #Convert proto file into usable python script
 cd libs/proto && python3 -m grpc_tools.protoc -I./ --python_out=. --grpc_python_out=. vsperf.proto
+sed -i 's/import vsperf_pb2 as vsperf__pb2/from . import vsperf_pb2 as vsperf__pb2/g' vsperf_pb2_grpc.py
 cd ../..
 
 #copy libs/proto and libs/utils in deployment and testcontrol container at appropriate location.
