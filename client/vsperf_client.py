@@ -184,7 +184,7 @@ class VsperfClient():
                                                 "[Y/N] : "))
                     continue
         filename = filename.strip()
-        chunks = self.get_file_chunks(filename)
+        chunks = self.get_file_chunks_1(filename)
         upload_status = self.stub.TGenUploadConfigFile(chunks)
         print(upload_status.Message)
 
@@ -277,7 +277,7 @@ class VsperfClient():
 
     @classmethod
     def get_file_chunks(cls, filename):
-        """convert file into chunk to stream between client and controller"""
+        """convert file into chunk to stream between client and controller with filename"""
         with open(filename, 'rb') as f_1:
             while True:
                 file_path = filename
@@ -286,7 +286,17 @@ class VsperfClient():
                 piece = f_1.read(CHUNK_SIZE)
                 if not piece:
                     return None
-                return vsperf_pb2.ConfFile(Content=piece, Filename=test_filename)
+                return vsperf_pb2.ConfFileTest(Content=piece, Filename=test_filename)
+    @classmethod
+    def get_file_chunks_1(cls, filename):
+        """Convert file into chunks"""
+        with open(filename, 'rb') as f:
+            while True:
+                piece = f.read(CHUNK_SIZE)
+                if len(piece) == 0:
+                    return
+                yield vsperf_pb2.ConfFile(Content=piece)
+
 
     def test_status(self):
         """check the test_status"""
@@ -483,7 +493,7 @@ class VsperfClient():
                                                 "[Y/N] : "))
                     continue
         filename = filename.strip()
-        chunks = self.get_file_chunks(filename)
+        chunks = self.get_file_chunks_1(filename)
         upload_status = self.stub.CollectdUploadConfig(chunks)
         print(upload_status.Message)
 
