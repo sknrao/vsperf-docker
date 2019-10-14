@@ -1,4 +1,4 @@
-Before using VSPERF client and VSPERF containers user must run the prepare.sh script which will prepare their local environment.
+Before using VSPERF client and VSPERF containers, user must run the prepare.sh script which will prepare their local environment.
 
 locate vsperf-docker/prepare.sh and run:
 bash prepare.sh
@@ -13,16 +13,15 @@ User have two choices for deployment, auto and interactive.
 
 1. auto
 ^^^^^^^^^^^^^^^^^^^^^
-This auto deployment container will do everything related with VSPERF set-up automatically. For example of installation of VSPERF, T-rex and collectd, upload T-rex and collectd configuration file on DUT-Host, start the t-rex traffic generator. If user find any failed or critical message in outputs, user should first correct those configuration and then run the testcontrol auto container to perform test.
-Before installing vsperf and t-rex, container verify the installed vsperf and t-rex and if both are already installed then container will not repeat this process. 
-User can modify the t-rex(trex_cfg.yaml)and collectd(collectd.conf) configuration files which will upload automatically.
+This auto deployment container will do everything related with VSPERF set-up automatically. It includes, installation of VSPERF, T-rex and collectd, uploading collectd configuration file on DUT-Host, uploading t-rex configuration files and starting the t-rex traffic generator. Before installing vsperf and t-rex, the container will perform verification process, which includes basic sanity checks such as checking for old installations, huge-page checks, necessary folders and software, etc. User should modify the t-rex(trex_cfg.yaml)and collectd(collectd.conf) configuration files depending on their needs before running the containers.
 
 
 Pre-Deployment Configuration
 ******************
-1.User have to provide all the DUT-Host and Traffic generator related credentials and IP address in list.env.
-2.Provide value for HUGEPAGE_MAX and HUGEPAGE_REQUESTED in list.env.
-3.Provide option for sanity check YES or NO in list.env file which is optional.
+User has to provide the following in list.env file:
+1.DUT-Host and TGen-Host related credentials and IP address
+2.Values for HUGEPAGE_MAX and HUGEPAGE_REQUESTED
+3.Option for sanity check - YES or NO.
 
 Build
 ******************
@@ -32,13 +31,10 @@ Run
 ******************
 Run the container's service with **docker-compose run deploy** command.
 
-Post-Deployment Configuration
-******************
-After running this container, if user find any failed or critical message in outputs then user should first correct those configuration and then run the testcontrol auto container to perform test.
 
 2. interactive
 ^^^^^^^^^^^^^^^^^^^^^
-This interactive container must run before using the vsperf client. It will just run the container and start the server for the vsperf client. Deployment interactive container handle all vsperf set-up related commands from vsperf client and perform the operation. Deployment interactive container running server on localhost port 50051.
+The interactive container must run before using the vsperf client. It will start the server on port 50051 for the vsperf client to send commands. Deployment interactive container handles all vsperf set-up related commands from vsperf client and performs the corresponding operation.
 
 
 Build
@@ -47,15 +43,14 @@ Run **docker-compose build** command to build the container.
 
 Run
 ******************
-Run the container's service with **docker-compose up deploy** command.
-
+Run the container with **docker-compose up deploy** command.
 Once the server is running user have to run testcontrol interactive container and then user can run the vsperf client.
 
 
 ===============
 testcontrol
 ===============
-For testcontrol also user have two choices , auto and interactive.
+For testcontrol too, user has two choices- auto and interactive.
 
 1. auto
 ^^^^^^^^^^^^^^^^^^^^^
@@ -80,7 +75,7 @@ User can observe the results and perform the another test by just changing the V
 
 2. interactive
 ^^^^^^^^^^^^^^^^^^^^^
-This interactive testcontrol container must run before using the vsperf client. It will just run the container and start the server for the vsperf client. This testcontrol interactive container handle all the test related commands from vsperf client and do the operations. Testcontrol interactive container running server on localhost port 50052.
+This interactive testcontrol container must run before using the vsperf client. It will start the server on port 50052 for the vsperf client. This testcontrol interactive container handle all the test related commands from vsperf client and do the operations. Testcontrol interactive container running server on localhost port 50052.
 
 Build
 ******************
@@ -88,6 +83,5 @@ Run **docker-compose build** command to build the container.
 
 Run
 ******************
-Run the container's service with **docker-compose up testcontrol** command.
-
+Run the container with **docker-compose up testcontrol** command.
 After running this container user can use the vsperf client.
