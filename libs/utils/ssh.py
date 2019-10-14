@@ -12,6 +12,8 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
+#pylint: disable=I,C,R,locally-disabled
+#pylint: disable=import-error,arguments-differ
 
 # this is a modified copy of rally/rally/common/sshutils.py
 
@@ -62,6 +64,7 @@ Eventlet:
     sshclient = eventlet.import_patched("vsperf.ssh")
 
 """
+from __future__ import print_function
 import io
 import logging
 import os
@@ -75,6 +78,7 @@ from chainmap import ChainMap
 from oslo_utils import encodeutils
 from scp import SCPClient
 import six
+
 # When building container change this to
 import utils.exceptions as exceptions
 #else keep it as
@@ -103,6 +107,7 @@ def convert_key_to_str(key):
 
 class SSH(object):
     """Represent ssh connection."""
+    #pylint: disable=no-member
 
     SSH_PORT = paramiko.config.SSH_PORT
     DEFAULT_WAIT_TIMEOUT = 120

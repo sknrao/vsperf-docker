@@ -1,5 +1,5 @@
 """Deploy : vsperf_deploy_client"""
-
+#pylint: disable=import-error
 
 import configparser
 import sys
@@ -42,8 +42,8 @@ class VsperfClient():
     It talks to vsperf-docker to perform installation, configuration and
     test-execution
     """
-    # pylint: disable=R0904
-    # pylint: disable=W0603
+    # pylint: disable=R0904,no-else-break
+    # pylint: disable=W0603,invalid-name
     # pylint: disable=R1710
     def __init__(self):
         """read vsperfclient.conf"""

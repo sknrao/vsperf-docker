@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# pylint: disable=R0904
-# pylint: disable=R0902
+# pylint: disable=R0904,unused-argument
+# pylint: disable=R0902,invalid-name,no-else-continue
 # twenty-two is reasonable in this script
 
 """
@@ -40,7 +40,7 @@ class PseudoFile(io.RawIOBase):
     """
     Handle ssh command output.
     """
-
+    #pylint: disable=unused-argument
     def write(self, chunk):
         """
         Write to file
@@ -355,7 +355,7 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
     def TerminateVsperf(self, request, context):
         """
         Terminate the VSPERF and kill processes
-        """
+        """ #pylint: disable=E1305
         if self.dut_check != 0:
             return vsperf_pb2.StatusReply(message="DUT-Host is not Connected [!]" \
                                                    "\nMake sure to establish connection with" \
@@ -373,7 +373,7 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
 
         if qemu_cmd_response != '':
             time.sleep(5)
-            self.client.send_command(qemu_kill_cmds)
+            self.client.send_command(qemu_kill_cmd)
             time.sleep(5)
 
         ovs_kill_cmd = "pkill ovs-vswitchd"

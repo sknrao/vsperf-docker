@@ -14,7 +14,7 @@
 
 # pylint: disable=R0902
 # Sixteen is reasonable instance attributes
-# pylint: disable=W0221
+# pylint: disable=W0221,import-error
 """
 VSPER docker-controller.
 """
@@ -51,7 +51,7 @@ class VsperfController(vsperf_pb2_grpc.ControllerServicer):
     """
     Main Controller Class
     """
-
+    #pylint: disable=invalid-name,unused-argument,no-else-continue
     def __init__(self):
         """
         Initialization

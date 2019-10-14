@@ -19,7 +19,7 @@ VSPERF-controller
 # Fetching Environment Variable for controller, You can configure or
 # modifies list.env file for setting your environment variable.
 
-#pylint: disable=global-statement
+#pylint: disable=global-statement,no-else-continue
 #pylint: disable=too-many-branches
 
 import os

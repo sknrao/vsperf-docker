@@ -1,3 +1,4 @@
+"""
 # Copyright (c) 2017 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,7 +12,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+"""
+#pylint: disable=import-error
 from oslo_utils import excutils
 
 
@@ -44,17 +46,20 @@ class VsperfCException(Exception):
         """Is the instance using fatal exceptions.
 
         :returns: Always returns False.
-        """
+        """ #pylint: disable=no-self-use
         return False
 
 
 class InvalidType(VsperfCException):
+    """Invalid type"""
     message = 'Type "%(type_to_convert)s" is not valid'
 
 
 class SSHError(VsperfCException):
+    """ssh error"""
     message = '%(error_msg)s'
 
 
 class SSHTimeout(SSHError):
+    """ssh timeout""" #pylint: disable=unnecessary-pass
     pass

@@ -1,3 +1,4 @@
+"""
 # Copyright 2013: Mirantis Inc.
 # All Rights Reserved.
 #
@@ -12,12 +13,14 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
+"""
 
 
 NON_NONE_DEFAULT = object()
 
 
 def get_key_with_default(data, key, default=NON_NONE_DEFAULT):
+    """get default key"""
     value = data.get(key, default)
     if value is NON_NONE_DEFAULT:
         raise KeyError(key)
@@ -25,12 +28,13 @@ def get_key_with_default(data, key, default=NON_NONE_DEFAULT):
 
 
 def make_dict_from_map(data, key_map):
+    """mapping dict"""
     return {dest_key: get_key_with_default(data, src_key, default)
             for dest_key, (src_key, default) in key_map.items()}
 
-
 def try_int(s, *args):
     """Convert to integer if possible."""
+    #pylint: disable=invalid-name
     try:
         return int(s)
     except (TypeError, ValueError):

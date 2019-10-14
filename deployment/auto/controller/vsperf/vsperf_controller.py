@@ -18,7 +18,7 @@ VSPERF_deploy_auto
 
 # Fetching Environment Variable for controller, You can configure or
 # modifies list.env file for setting your environment variable.
-# pylint: disable=W0603
+# pylint: disable=W0603,no-else-continue
 
 import os
 
