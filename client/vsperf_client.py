@@ -53,6 +53,10 @@ class VsperfClient():
         self.stub = None
         self.dut_check = 0
         self.tgen_check = 0
+    
+    def get_mode(self):
+    	"""read the mode for the client"""
+    	return self.config.get('Mode', 'mode')
 
     def get_deploy_channel_info(self):
         """get the channel data"""
@@ -67,8 +71,28 @@ class VsperfClient():
     def create_stub(self, channel):
         """create stub to talk to controller"""
         self.stub = vsperf_pb2_grpc.ControllerStub(channel)
-
+    
     def host_connect(self):
+        """provice dut-host credential to controller"""
+        global DUT_CHECK
+        hostinfo = vsperf_pb2.HostInfo(ip=self.config.get('Host', 'ip'),
+                                       uname=self.config.get('Host', 'uname'),
+                                       pwd=self.config.get('Host', 'pwd'))
+        connect_reply = self.stub.HostConnect(hostinfo)
+        DUT_CHECK = 1
+        print(connect_reply.message)
+
+    def tgen_connect(self):
+        """provide tgen-host credential to controller"""
+        global TGEN_CHECK
+        tgeninfo = vsperf_pb2.HostInfo(ip=self.config.get('TGen', 'ip'),
+                                       uname=self.config.get('TGen', 'uname'),
+                                       pwd=self.config.get('TGen', 'pwd'))
+        connect_reply = self.stub.TGenHostConnect(tgeninfo)
+        TGEN_CHECK = 1
+        print(connect_reply.message)
+
+    def host_connect_both(self):
         """provice dut-host credential to controller"""
         global DUT_CHECK
         hostinfo = vsperf_pb2.HostInfo(ip=self.config.get('Host', 'ip'),
@@ -80,7 +104,7 @@ class VsperfClient():
         DUT_CHECK = 1
         print(connect_reply.message)
 
-    def tgen_connect(self):
+    def tgen_connect_both(self):
         """provide tgen-host credential to controller"""
         global TGEN_CHECK
         tgeninfo = vsperf_pb2.HostInfo(ip=self.config.get('TGen', 'ip'),
@@ -504,14 +528,45 @@ class VsperfClient():
                                        pwd=self.config.get('Host', 'pwd'))
         check_reply = self.stub.CheckDependecies(hostinfo)
         print(check_reply.message)
-
+    
     @classmethod
-    def establish_connection(cls):
+    def establish_connection_both(cls):
         """
-        This Function use to establish connection for vsperf
+        This Function use to establish connection for vsperf to both the deploy server \
+        and testcontrol server
         """
         client = VsperfClient()
         ip_add, port = client.get_deploy_channel_info()
+        print("Establish connection for vsperf")
+        menuitems_connection = [
+            {"Connect to DUT Host": client.host_connect_both},
+            {"Connect to TGen Host": client.tgen_connect_both},
+            {"Return to Previous Menu": client.exit_section}
+        ]
+        client.section_execute(menuitems_connection, client, ip_add, port)
+    @classmethod
+    def establish_connection_deploy(cls):
+        """
+        This Function use to establish connection for vsperf to either using the dploy 
+        or using the testcontrol server
+        """
+        client = VsperfClient()
+        ip_add, port = client.get_deploy_channel_info()
+        print("Establish connection for vsperf")
+        menuitems_connection = [
+            {"Connect to DUT Host": client.host_connect},
+            {"Connect to TGen Host": client.tgen_connect},
+            {"Return to Previous Menu": client.exit_section}
+        ]
+        client.section_execute(menuitems_connection, client, ip_add, port)
+    @classmethod
+    def establish_connection_test(cls):
+        """
+        This Function use to establish connection for vsperf to either using the dploy 
+        or using the testcontrol server
+        """
+        client = VsperfClient()
+        ip_add, port = client.get_test_channel_info()
         print("Establish connection for vsperf")
         menuitems_connection = [
             {"Connect to DUT Host": client.host_connect},
@@ -625,8 +680,63 @@ class VsperfClient():
 def run():
     """It will run the actul primary options"""
     client = VsperfClient()
-    menuitems = [
-        {"Establish Connections": client.establish_connection},
+    client_mode = client.get_mode()
+    print(client_mode)
+    if "deploy" in client_mode.lower().strip():
+        menuitems = [
+        {"Establish Connections": client.establish_connection_deploy},
+        {"Installation": client.vsperf_setup},
+        {"Upload Configuration Files": client.upload_config_files},
+        {"Manage DUT-System Configuration": client.manage_sysparam_config},
+        {"Exit": sys.exit}
+        ]
+        #ip_add, port = client.get_channel_info()
+        #channel = grpc.insecure_channel(ip_add + ':' + port)
+        while True:
+        # os.system('clear')
+            print(colorize(HEADER, 'blue'))
+            print(colorize('version 0.1\n', 'pink'))
+            for item in menuitems:
+                print(colorize("[" +
+                               str(menuitems.index(item)) + "]", 'green') +
+                      list(item.keys())[0])
+            choice = input(">> ")
+            try:
+                if int(choice) < 0:
+                    raise ValueError
+                list(menuitems[int(choice)].values())[0]()
+            except (ValueError, IndexError):
+                pass
+
+    elif "test" in  client_mode.lower().strip():
+        menuitems = [
+        {"Establish Connections": client.establish_connection_test},
+        {"Run Test": client.run_test},
+        {"Test Status": client.test_status_check},
+        {"Clean-Up": client.clean_up},
+        {"Exit": sys.exit}
+	    ]
+        #ip_add, port = client.get_channel_info()
+        #channel = grpc.insecure_channel(ip_add + ':' + port)
+        while True:
+            # os.system('clear')
+            print(colorize(HEADER, 'blue'))
+            print(colorize('version 0.1\n', 'pink'))
+            for item in menuitems:
+                print(colorize("[" +
+                               str(menuitems.index(item)) + "]", 'green') +
+                      list(item.keys())[0])
+            choice = input(">> ")
+            try:
+                if int(choice) < 0:
+                    raise ValueError
+                list(menuitems[int(choice)].values())[0]()
+            except (ValueError, IndexError):
+                pass
+
+    elif "together" in client_mode.lower().strip():
+        menuitems = [
+        {"Establish Connections": client.establish_connection_both},
         {"Installation": client.vsperf_setup},
         {"Upload Configuration Files": client.upload_config_files},
         {"Manage DUT-System Configuration": client.manage_sysparam_config},
@@ -634,24 +744,27 @@ def run():
         {"Test Status": client.test_status_check},
         {"Clean-Up": client.clean_up},
         {"Exit": sys.exit}
-    ]
-    #ip_add, port = client.get_channel_info()
-    #channel = grpc.insecure_channel(ip_add + ':' + port)
-    while True:
-        # os.system('clear')
-        print(colorize(HEADER, 'blue'))
-        print(colorize('version 0.1\n', 'pink'))
-        for item in menuitems:
-            print(colorize("[" +
-                           str(menuitems.index(item)) + "]", 'green') +
-                  list(item.keys())[0])
-        choice = input(">> ")
-        try:
-            if int(choice) < 0:
-                raise ValueError
-            list(menuitems[int(choice)].values())[0]()
-        except (ValueError, IndexError):
-            pass
+	    ]
+        #ip_add, port = client.get_channel_info()
+        #channel = grpc.insecure_channel(ip_add + ':' + port)
+        while True:
+            # os.system('clear')
+            print(colorize(HEADER, 'blue'))
+            print(colorize('version 0.1\n', 'pink'))
+            for item in menuitems:
+                print(colorize("[" +
+                               str(menuitems.index(item)) + "]", 'green') +
+                      list(item.keys())[0])
+            choice = input(">> ")
+            try:
+                if int(choice) < 0:
+                    raise ValueError
+                list(menuitems[int(choice)].values())[0]()
+            except (ValueError, IndexError):
+                pass
+
+    else:
+        print("You have not defined client mode in vsperfclient.conf [!]")
 
 
 if __name__ == '__main__':
