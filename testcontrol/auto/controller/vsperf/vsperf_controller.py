@@ -42,6 +42,8 @@ VSPERF_TEST = os.getenv('VSPERF_TESTS')
 VSPERF_CONF = os.getenv('VSPERF_CONFFILE')
 VSPERF_TRAFFICGEN_MODE = str(os.getenv('VSPERF_TRAFFICGEN_MODE'))
 
+START_COLLECTD = os.getenv('START_COLLECTD')
+START_BEATS = os.getenv('START_BEATS')
 CLEAN_UP = os.getenv('CLEAN_UP')
 
 DUT_CLIENT = None
@@ -62,6 +64,9 @@ def upload_test_config_file():
     #Upload Test Config File on DUT
     """
     localpath = '/usr/src/app/vsperf/vsperf.conf'
+    if not os.path.exists(localpath):
+        print("VSPERF Test config File does not exists.......................[Failed]")
+        return
     remotepath = '~/vsperf.conf'
     check_test_config_cmd = "find ~/ -maxdepth 1 -name '{}'".format(
         remotepath[2:])
@@ -69,36 +74,46 @@ def upload_test_config_file():
     if remotepath[2:] in check_test_result:
         DUT_CLIENT.run("rm -f {}".format(remotepath[2:]))
     DUT_CLIENT.put_file(localpath, remotepath)
-    print(
+    check_test_config_cmd_1= "find ~/ -maxdepth 1 -name '{}'".format(
+        remotepath[2:])
+    check_test_result_1= str(DUT_CLIENT.execute(check_test_config_cmd)[1])
+    if remotepath[2:] in check_test_result_1:
+    	print(
         "Test Configuration File Uploaded on DUT-Host.............................[OK] \n ")
-
+    else:
+    	print("VSPERF Test config file upload failed.....................................[Critical]")
 
 def start_beats():
     """
     Start fileBeats on DUT
     """
     run_cmd = "echo '{}' | sudo -S service filebeat start".format(DUT_PWD)
-    #run_cmd = "sudo service filebeat start"
     DUT_CLIENT.run(run_cmd, pty=True)
     print(
         "Beats are started on DUT-Host............................................[OK] \n")
+
+def start_collectd():
+    """
+    start the collectd
+    """
+    run_cmd = "echo '{}' | sudo -S service collectd start".format(DUT_PWD)
+    DUT_CLIENT.run(run_cmd, pty=True)
+    print(
+        "Collectd is started on DUT-Host............................................[OK] \n")
 
 def run_vsperf_test():
     """
     Here we will perform the actual vsperf test
     """
     global TIMER
-    # Sometimes hugepage store in /mnt/huge in order to free up the hugepage
-    # removing this stored hugepage is necessory
     rmv_cmd = "cd /mnt/huge && echo {} | sudo -S rm -rf *".format(DUT_PWD)
     DUT_CLIENT.run(rmv_cmd, pty=True)
     cmd = "source ~/vsperfenv/bin/activate ; "
     #cmd = "scl enable python33 bash ; "
-    cmd += "cd vswitchperf* && "
+    cmd += "cd vswitchperf && "
     cmd += "./vsperf "
     if VSPERF_CONF:
         cmd += "--conf-file ~/vsperf.conf "
-        # cmd += self.conffile
     if "yes" in VSPERF_TRAFFICGEN_MODE.lower():
         cmd += "--mode trafficgen"
     vsperf_test_list = VSPERF_TEST.split(",")
@@ -196,7 +211,7 @@ def collectd_remove():
     DUT_CLIENT.run(collectd_rm_cmd)
 
 
-def terminate_vaperf():
+def terminate_vsperf():
     """
     Terminate the VSPERF and kill processes
     """
@@ -243,7 +258,7 @@ def terminate_vaperf():
         "All the VSPERF related process terminated successfully..............[OK]")
 
 
-def sanit_collectd_check():
+def sanity_collectd_check():
     """
     Check and verify collectd is able to run and start properly
     """
@@ -316,10 +331,10 @@ def sanity_vsperf_check():
                     ".......[OK]\n")
             else:
                 print(
-                    "VSPERF Does Not Installed Correctly , INSTALL IT AGAIN.........[Critical]\n")
+                    "VSPERF DID Not Installed Correctly , INSTALL IT AGAIN...........[Critical]\n")
         else:
             print(
-                "VSPERF Does Not Installed Correctly , INSTALL IT AGAIN..............[Critical]\n")
+                "VSPERF DID Not Installed Correctly , INSTALL IT AGAIN................[Critical]\n")
             break
 
 def variable_from_test_config(aparameter):
@@ -342,7 +357,7 @@ def cpumask2coreids(mask):
         i = i << 1
     return coreids
 
-def cpu_allocation_check():
+def sanity_cpu_allocation_check():
     """It will check the cpu allocation before run test"""
     global SANITY_CHECK_DONE_LIST
     read_setting_cmd = "source vsperfenv/bin/activate ; cd vswitchperf* && "
@@ -358,7 +373,6 @@ def cpu_allocation_check():
         vswitch_vhost_cpu_map = [str(x) for x in  ast.literal_eval(vswitch_cpu_map)]
 
     if vswitch_pmd_cpu_mask == 0 and vswitch_vhost_cpu_map == 0:
-        SANITY_CHECK_DONE_LIST.append(int(4))
         print("CPU allocation Check Done,"\
             "\nNo vswitch_pmd_cpu_mask or vswitch_vhost_cpu_map assign in test config file\n" \
             "Using Default Settings ..................................................[OK]\n")
@@ -367,7 +381,6 @@ def cpu_allocation_check():
         print(core_id)
         if len(default_vswitch_vhost_cpu_map) >= len(core_id):
             if all(elem in default_vswitch_vhost_cpu_map  for elem in core_id):
-                SANITY_CHECK_DONE_LIST.append(int(4))
                 print("CPU allocation properly done on DUT-Host.................[OK]\n")
             else:
                 print("CPU allocation not done properly on DUT-Host............[Failed]\n")
@@ -378,7 +391,6 @@ def cpu_allocation_check():
         print(core_id_1)
         if len(vswitch_vhost_cpu_map) >= len(core_id_1):
             if all(elem in vswitch_vhost_cpu_map  for elem in core_id_1):
-                SANITY_CHECK_DONE_LIST.append(int(4))
                 print("CPU allocation properly done on DUT-Host.................[OK]\n")
             else:
                 print("CPU allocation not done properly on DUT-Host............[Failed]\n")
@@ -389,7 +401,6 @@ def cpu_allocation_check():
         print(core_id_2)
         if len(vswitch_vhost_cpu_map) >= len(core_id_2):
             if all(elem in vswitch_vhost_cpu_map  for elem in core_id_2):
-                SANITY_CHECK_DONE_LIST.append(int(4))
                 print("CPU allocation properly done on DUT-Host.................[OK]\n")
             else:
                 print("CPU allocation not done properly on DUT-Host............[Failed]\n")
@@ -415,27 +426,44 @@ def sanity_dut_conn_tgen_check():
         print(
             "Make sure to establish connection before running Test...............[Critical]\n")
 
-
-host_connect()
-upload_test_config_file()
-sanity_vnf_path()
-cpu_allocation_check()
-sanit_collectd_check()
-sanity_vsperf_check()
-sanity_dut_conn_tgen_check()
-start_beats()
-
-if len(SANITY_CHECK_DONE_LIST) != 5:
-    print("Certain Sanity Checks Failed\n" \
-          "You can make changes based on the outputs and run" \
-          "the testcontrol auto container again")
+if DUT_IP:
+    host_connect()
+if not DUT_CLIENT:
+    print('Failed to connect to DUT ...............[Critical]')
+    sys.exit()
 else:
-    run_vsperf_test()
-    test_status()
+    upload_test_config_file()
+    sanity_vnf_path()
+    sanity_cpu_allocation_check()
+    sanity_collectd_check()
+    sanity_vsperf_check()
+    sanity_dut_conn_tgen_check()
+    if "yes" in START_COLLECTD.lower():
+        start_collectd()
+    if "yes" in START_BEATS.lower():
+        start_beats()
+
+if 'v' in VSPERF_TEST:	
+    if len(SANITY_CHECK_DONE_LIST) != 4:
+        print("Certain Sanity Checks Failed\n" \
+              "You can make changes based on the outputs and run" \
+              "the testcontrol auto container again")
+    else:
+        run_vsperf_test()
+        test_status()
+else:
+    if len(SANITY_CHECK_DONE_LIST) != 3:
+        print("Certain Sanity Checks Failed\n" \
+              "You can make changes based on the outputs and run" \
+              "the testcontrol auto container again")
+    else:
+        run_vsperf_test()
+        test_status()
+
 
 if "yes" in CLEAN_UP.lower():
     vsperf_remove()
     remove_uploaded_config()
     result_folders_remove()
     collectd_remove()
-    terminate_vaperf()
+    terminate_vsperf()
